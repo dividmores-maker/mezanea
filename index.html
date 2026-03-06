@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام إدارة الكنيسة</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0f1b2d 0%, #1a2d4a 50%, #0d2137 100%); color: #e8d5b7; }
+
+/* WELCOME */
+#welcome-screen { position:fixed; inset:0; z-index:9999; background:linear-gradient(135deg,#0a1520,#0f1b2d); display:flex; align-items:center; justify-content:center; }
+.welcome-box { text-align:center; padding:50px 60px; background:linear-gradient(135deg,#162535,#0f1e2e); border:2px solid #c9920a; border-radius:24px; box-shadow:0 20px 60px rgba(0,0,0,0.7); max-width:560px; width:90%; }
+.welcome-cross { font-size:72px; margin-bottom:14px; animation:pglow 2s ease-in-out infinite alternate; }
+@keyframes pglow { from{text-shadow:0 0 10px #c9920a;} to{text-shadow:0 0 30px #f5d78e,0 0 50px #c9920a;} }
+.welcome-title { font-size:28px; font-weight:900; color:#f5d78e; margin-bottom:8px; }
+.welcome-sub { color:#8ab; font-size:15px; margin-bottom:36px; }
+.year-grid { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:14px; }
+.year-btn { padding:18px 32px; border-radius:14px; border:2px solid #c9920a; background:rgba(201,146,10,0.08); color:#f5d78e; font-size:22px; font-weight:900; cursor:pointer; font-family:inherit; transition:all 0.2s; min-width:130px; }
+.year-btn:hover { background:linear-gradient(135deg,#c9920a,#8b6914); color:#fff; transform:scale(1.05); }
+.year-btn.saved { border-color:#6dcc88; color:#6dcc88; background:rgba(40,180,80,0.08); }
+.year-btn.saved:hover { background:linear-gradient(135deg,#1a7a3a,#155c2c); color:#fff; }
+.new-year-btn { padding:16px 28px; border-radius:14px; border:2px dashed #3a6a9c; background:transparent; color:#7bc; font-size:17px; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.2s; min-width:130px; }
+.new-year-btn:hover { border-color:#7bc; background:rgba(40,100,180,0.1); }
+
+/* SYNC STATUS in welcome */
+.sync-bar { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:14px; font-size:13px; padding:8px 16px; border-radius:8px; }
+.sync-bar.online  { background:rgba(40,180,80,0.1);  color:#6dcc88; border:1px solid rgba(40,180,80,0.3); }
+.sync-bar.offline { background:rgba(200,150,0,0.1);  color:#f5d78e; border:1px solid rgba(200,150,0,0.3); }
+.sync-bar.syncing { background:rgba(80,120,255,0.1); color:#aac4ff; border:1px solid rgba(80,120,255,0.3); }
+
+/* HEADER */
+.header { background:linear-gradient(90deg,#8b6914,#c9920a,#8b6914); padding:14px 24px; box-shadow:0 4px 20px rgba(0,0,0,0.5); border-bottom:2px solid #c9920a; }
+.header-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.header h1 { font-size:22px; font-weight:900; color:#fff; }
+.header p { color:#f5d78e; font-size:13px; margin-top:2px; }
+.hbtn { padding:7px 13px; border-radius:8px; cursor:pointer; font-family:inherit; font-size:12px; font-weight:700; white-space:nowrap; }
+
+/* SYNC INDICATOR in header */
+#sync-indicator { display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.3s; }
+#sync-indicator.online  { background:rgba(40,180,80,0.15);  color:#6dcc88; border:1px solid rgba(40,180,80,0.4); }
+#sync-indicator.offline { background:rgba(200,150,0,0.15);  color:#f5d78e; border:1px solid rgba(200,150,0,0.4); }
+#sync-indicator.syncing { background:rgba(80,120,255,0.15); color:#aac4ff; border:1px solid rgba(80,120,255,0.4); }
+#sync-dot { width:8px; height:8px; border-radius:50%; }
+#sync-indicator.online  #sync-dot { background:#6dcc88; box-shadow:0 0 6px #6dcc88; }
+#sync-indicator.offline #sync-dot { background:#f5d78e; }
+#sync-indicator.syncing #sync-dot { background:#aac4ff; animation:blink 0.8s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* TABS */
+.tabs { background:#0d1e30; border-bottom:1px solid #1e3a55; position:sticky; top:0; z-index:10; }
+.tabs-inner { max-width:1100px; margin:0 auto; display:flex; }
+.tab-btn { padding:13px 24px; border:none; cursor:pointer; font-size:15px; font-family:inherit; background:transparent; color:#9ab; border-bottom:3px solid transparent; transition:all 0.2s; }
+.tab-btn.active { background:linear-gradient(180deg,#c9920a,#8b6914); color:#fff; font-weight:700; border-bottom:3px solid #f5d78e; }
+
+/* CONTENT */
+.content { max-width:1100px; margin:0 auto; padding:24px 16px; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* CARDS */
+.summary-cards { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:26px; }
+.card { background:linear-gradient(135deg,#1a3a5c,#0f2238); border:1px solid #2a5a8c; border-radius:12px; padding:20px; text-align:center; }
+.card-icon { font-size:34px; }
+.card-value { font-size:34px; font-weight:900; color:#f5d78e; margin:8px 0; }
+.card-label { color:#8ab; font-size:14px; }
+
+/* BOXES */
+.box { background:linear-gradient(135deg,#162535,#0f1e2e); border:1px solid #1e3a55; border-radius:14px; overflow:hidden; margin-bottom:20px; }
+.box-header { padding:14px 20px; border-bottom:1px solid #1e3a55; }
+.box-body { padding:16px 20px; }
+.box-green { border-color:#1e4a2e; }
+.box-green .box-header { background:linear-gradient(90deg,#1a4a2a,#0f3020); }
+.box-green .box-header h3 { color:#6dcc88; }
+.box-red { border-color:#4a1e2e; }
+.box-red .box-header { background:linear-gradient(90deg,#4a1a28,#350f1a); }
+.box-red .box-header h3 { color:#e07090; }
+
+/* INPUT ROW */
+.input-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid #1a3050; }
+.input-row label { color:#c8dcc8; font-size:14px; }
+.input-row input { width:120px; padding:6px 10px; border-radius:6px; border:1px solid #2a5a3c; background:#0a1820; color:#6dcc88; font-size:14px; text-align:center; font-family:inherit; outline:none; }
+.input-row-red label { color:#c8aab8; }
+.input-row-red input { border-color:#4a2040; background:#0a0814; color:#e07090; width:100px; }
+.subtotal { display:flex; justify-content:space-between; padding:5px 0 2px; color:#d88; font-size:13px; }
+.total-row { display:flex; justify-content:space-between; padding:10px 0 4px; border-top:2px solid #2a6a3a; margin-top:6px; }
+.total-row-red { border-top-color:#6a2040; }
+.cat-header { color:#f5d78e; font-weight:700; font-size:13px; padding:6px 0 4px; border-bottom:1px solid #3a2030; margin-bottom:5px; margin-top:10px; }
+
+/* PARISH */
+.parish-card { background:linear-gradient(135deg,#162535,#0f1e2e); border:2px solid #1e3a55; border-radius:14px; overflow:hidden; margin-bottom:18px; }
+.parish-card.open { border-color:#c9920a; }
+.parish-header { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; cursor:pointer; }
+.parish-header:hover { background:rgba(201,146,10,0.05); }
+.parish-title { display:flex; align-items:center; gap:12px; }
+.parish-title h4 { font-size:17px; color:#f5d78e; }
+.parish-title p { font-size:13px; color:#8ab; margin-top:3px; }
+.parish-stats { display:flex; gap:10px; align-items:center; }
+.stat-badge { text-align:center; border-radius:8px; padding:5px 14px; }
+.stat-badge.gold { background:rgba(201,146,10,0.1); border:1px solid rgba(201,146,10,0.3); }
+.stat-badge.blue { background:rgba(40,100,180,0.1); border:1px solid rgba(40,100,180,0.3); }
+.stat-badge .num { font-size:18px; font-weight:900; }
+.stat-badge.gold .num { color:#f5d78e; }
+.stat-badge.blue .num { color:#7bc; }
+.stat-badge .lbl { font-size:11px; color:#8ab; }
+.parish-body { padding:0 18px 18px; border-top:1px solid #1e3a55; display:none; }
+.parish-body.open { display:block; }
+
+/* TABLE */
+.data-table { width:100%; border-collapse:collapse; border:1px solid #1e3a55; }
+.data-table th { padding:10px 14px; text-align:right; color:#f5d78e; font-size:13px; font-weight:700; border-bottom:1px solid #2a4a6c; background:rgba(201,146,10,0.12); }
+.data-table td { padding:9px 14px; border-bottom:1px solid #1a3050; font-size:14px; }
+.data-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+.total-tr td { background:rgba(201,146,10,0.08)!important; border-top:2px solid #c9920a; color:#f5d78e; font-weight:700; }
+.badge-blue { background:rgba(40,100,180,0.2); color:#7bc; border-radius:20px; padding:3px 14px; font-size:13px; font-weight:700; }
+.badge-gold { background:rgba(201,146,10,0.2); color:#f5d78e; border-radius:20px; padding:3px 14px; font-size:14px; font-weight:900; }
+
+/* BUTTONS */
+.btn { padding:9px 20px; border-radius:8px; border:none; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700; }
+.btn-gold { background:linear-gradient(135deg,#c9920a,#8b6914); color:#fff; }
+.btn-green { background:linear-gradient(135deg,#1a7a3a,#155c2c); color:#fff; }
+.btn-red { background:rgba(200,50,50,0.1); border:1px solid rgba(200,50,50,0.3)!important; color:#f88; border-radius:6px; padding:5px 12px; cursor:pointer; font-size:12px; }
+.btn-del { background:rgba(200,50,50,0.1); border:1px solid rgba(200,50,50,0.25); color:#f77; border-radius:6px; padding:4px 12px; cursor:pointer; font-size:12px; }
+
+/* FORMS */
+.form-row { display:flex; gap:10px; margin:14px 0; flex-wrap:wrap; }
+.form-row input { padding:9px 14px; border-radius:8px; border:1px solid #3a6a9c; background:#0f1e30; color:#e8d5b7; font-size:14px; font-family:inherit; outline:none; }
+
+/* MONTHS */
+.month-pills { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.month-pill { padding:7px 18px; border-radius:20px; border:1px solid #1e3a55; background:#1a2d4a; color:#8ab; cursor:pointer; font-family:inherit; font-size:14px; transition:all 0.2s; }
+.month-pill.active { background:linear-gradient(135deg,#c9920a,#8b6914); color:#fff; font-weight:700; border-color:transparent; }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
+/* BALANCE */
+.balance-box { border-radius:14px; padding:20px 28px; display:flex; justify-content:space-between; align-items:center; margin-top:20px; }
+.balance-box.positive { background:linear-gradient(135deg,#0f2820,#0a1e18); border:2px solid #2a6a3a; }
+.balance-box.negative { background:linear-gradient(135deg,#280f15,#1e0a10); border:2px solid #6a2030; }
+.balance-label { color:#9ab; font-size:14px; }
+.balance-amount { font-size:28px; font-weight:900; margin-top:4px; }
+.balance-amount.positive { color:#6dcc88; }
+.balance-amount.negative { color:#e07090; }
+
+/* ANNUAL */
+.annual-table { width:100%; border-collapse:collapse; border:1px solid #1e3a55; }
+.annual-table th { padding:13px 18px; text-align:center; color:#f5d78e; font-size:14px; font-weight:700; border-bottom:2px solid #c9920a; background:rgba(201,146,10,0.15); }
+.annual-table td { padding:11px 18px; text-align:center; border-bottom:1px solid #1a3050; font-size:14px; cursor:pointer; }
+.annual-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+.annual-table tr:hover td { background:rgba(201,146,10,0.07)!important; }
+.annual-table .total-tr td { background:rgba(201,146,10,0.1)!important; border-top:2px solid #c9920a; font-weight:900; font-size:15px; }
+
+/* NOTES */
+.note-section { background:#1a2d4a; border:1px solid #2a4a6c; border-radius:14px; overflow:hidden; margin-top:20px; }
+.note-header { background:#152238; padding:14px 20px; border-bottom:1px solid #2a4a6c; }
+.note-header h3 { color:#f5d78e; font-size:15px; }
+.note-body { padding:16px; }
+
+.empty-state { text-align:center; padding:50px; color:#567; }
+.empty-state .empty-icon { font-size:60px; margin-bottom:14px; }
+
+@media(max-width:700px){
+  .summary-cards { grid-template-columns:1fr; }
+  .grid-2{ grid-template-columns:1fr; }
+  .welcome-box { padding:30px 20px; }
+  .header-inner { gap:6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- WELCOME SCREEN -->
+<div id="welcome-screen">
+  <div class="welcome-box">
+    <div class="welcome-cross">✝</div>
+    <div class="welcome-title">نظام إدارة الكنيسة</div>
+    <div class="welcome-sub">اختر السنة للبدء</div>
+    <div class="year-grid" id="year-grid"></div>
+    <div style="color:#567;font-size:13px;margin-bottom:10px">🟢 سنة فيها بيانات محفوظة</div>
+    <div class="sync-bar" id="welcome-sync-bar">
+      <span id="welcome-sync-dot" style="width:9px;height:9px;border-radius:50%;background:#567;display:inline-block"></span>
+      <span id="welcome-sync-text">جاري الاتصال بالسحابة...</span>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD MODAL -->
+<div id="pw-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:linear-gradient(135deg,#1a2d4a,#0f1e30);border:2px solid #c9920a;border-radius:16px;padding:32px 36px;width:320px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.6);">
+    <div style="font-size:48px;margin-bottom:12px">🔐</div>
+    <h3 style="color:#f5d78e;margin-bottom:8px;font-size:18px">أدخل كلمة المرور</h3>
+    <p style="color:#8ab;font-size:13px;margin-bottom:20px">لتعديل الرصيد الافتتاحي</p>
+    <input type="password" id="pw-input" maxlength="20" placeholder="••••••"
+      onkeydown="if(event.key==='Enter')checkPw()"
+      style="width:100%;padding:12px;border-radius:8px;border:2px solid #3a5a8c;background:#0a1420;color:#e8d5b7;font-size:20px;text-align:center;font-family:inherit;outline:none;letter-spacing:4px;margin-bottom:8px">
+    <div id="pw-error" style="color:#e07090;font-size:13px;min-height:20px;margin-bottom:12px"></div>
+    <div style="display:flex;gap:10px">
+      <button onclick="checkPw()" style="flex:1;padding:11px;border-radius:8px;border:none;background:linear-gradient(135deg,#c9920a,#8b6914);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">دخول</button>
+      <button onclick="closePw()" style="flex:1;padding:11px;border-radius:8px;border:1px solid #3a5a8c;background:transparent;color:#9ab;font-size:15px;cursor:pointer;font-family:inherit">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESTORE CONFIRM MODAL -->
+<div id="restore-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:linear-gradient(135deg,#1a2d4a,#0f1e30);border:2px solid #4a8aff;border-radius:16px;padding:32px 36px;width:360px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.6);">
+    <div style="font-size:48px;margin-bottom:12px">📥</div>
+    <h3 style="color:#aac4ff;margin-bottom:10px;font-size:18px">استرداد نسخة احتياطية</h3>
+    <p style="color:#8ab;font-size:14px;margin-bottom:8px">الملف: <span id="restore-filename" style="color:#f5d78e;font-weight:700"></span></p>
+    <p style="color:#e07090;font-size:13px;margin-bottom:22px;background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.3);border-radius:8px;padding:10px;">⚠️ تحذير: هيتم استبدال كل البيانات الحالية بالنسخة الاحتياطية</p>
+    <div style="display:flex;gap:10px;">
+      <button onclick="confirmRestore()" style="flex:1;padding:12px;border-radius:8px;border:none;background:linear-gradient(135deg,#2a4a9c,#1a3070);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">✅ استرداد</button>
+      <button onclick="cancelRestore()" style="flex:1;padding:12px;border-radius:8px;border:1px solid #3a5a8c;background:transparent;color:#9ab;font-size:15px;cursor:pointer;font-family:inherit;">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="display:none;position:fixed;bottom:30px;left:50%;transform:translateX(-50%);padding:12px 28px;border-radius:10px;font-size:15px;font-weight:700;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.5);transition:all 0.3s;white-space:nowrap;"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <span style="font-size:38px">✝</span>
+    <div>
+      <h1>نظام إدارة الكنيسة</h1>
+      <p>ميزانية <span id="header-year"></span></p>
+    </div>
+    <!-- Sync Indicator -->
+    <div id="sync-indicator" class="offline" onclick="manualSync()" title="اضغط للمزامنة يدوياً">
+      <div id="sync-dot"></div>
+      <span id="sync-text">أوفلاين</span>
+    </div>
+    <button onclick="goWelcome()" class="hbtn" style="border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.2);color:#fff;">🏠 السنوات</button>
+    <button onclick="exportBackup()" class="hbtn" style="border:1px solid rgba(100,220,130,0.5);background:rgba(20,100,40,0.3);color:#6dcc88;">📤 احتياطي</button>
+    <button onclick="document.getElementById('restore-input').click()" class="hbtn" style="border:1px solid rgba(100,160,255,0.5);background:rgba(20,50,120,0.3);color:#aac4ff;">📥 استرداد</button>
+    <input type="file" id="restore-input" accept=".json" style="display:none" onchange="importBackup(this)">
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="showTab('parishes',this)">الشعب</button>
+    <button class="tab-btn" onclick="showTab('budget',this)">الميزانية الشهرية</button>
+    <button class="tab-btn" onclick="showTab('annual',this)">ملخص سنوي</button>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- PARISHES TAB -->
+  <div id="tab-parishes" class="tab-panel active">
+    <div class="summary-cards">
+      <div class="card"><div class="card-icon">🏛</div><div class="card-value" id="total-parishes">0</div><div class="card-label">إجمالي الشعب</div></div>
+      <div class="card"><div class="card-icon">🏠</div><div class="card-value" id="total-families">0</div><div class="card-label">إجمالي الأسر</div></div>
+      <div class="card"><div class="card-icon">👥</div><div class="card-value" id="total-members">0</div><div class="card-label">إجمالي الأفراد</div></div>
+    </div>
+    <div class="box" style="margin-bottom:22px">
+      <div class="box-header"><h3 style="color:#f5d78e;font-size:15px">➕ إضافة شعبة جديدة</h3></div>
+      <div class="box-body">
+        <div class="form-row">
+          <input id="new-parish-name" type="text" placeholder="اسم الشعبة..." style="flex:1" onkeydown="if(event.key==='Enter')addParish()">
+          <button class="btn btn-gold" onclick="addParish()">إضافة شعبة</button>
+        </div>
+      </div>
+    </div>
+    <div id="parishes-list">
+      <div class="empty-state"><div class="empty-icon">🏛</div>لم يتم إضافة شعب بعد</div>
+    </div>
+  </div>
+
+  <!-- BUDGET TAB -->
+  <div id="tab-budget" class="tab-panel">
+    <!-- Opening Balance -->
+    <div style="background:linear-gradient(135deg,#1a3a20,#0f2215);border:2px solid #2a7a3a;border-radius:14px;padding:18px 24px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <span style="font-size:30px">💼</span>
+      <div>
+        <div style="color:#6dcc88;font-weight:700;font-size:15px">رصيد أول السنة</div>
+        <div style="color:#8ab;font-size:13px;margin-top:2px">يترحل تلقائياً من شهر لشهر</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-right:auto;flex-wrap:wrap">
+        <label style="color:#c8dcc8;font-size:14px">الرصيد الافتتاحي:</label>
+        <div id="ob-locked" style="display:flex;align-items:center;gap:8px">
+          <span id="ob-display" style="background:#0a1810;border:2px solid #2a7a3a;border-radius:8px;padding:8px 18px;color:#6dcc88;font-size:17px;font-weight:900;min-width:110px;text-align:center">0 جنيه</span>
+          <button onclick="unlockOB()" style="background:rgba(201,146,10,0.15);border:1px solid rgba(201,146,10,0.4);color:#f5d78e;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:18px">🔒</button>
+        </div>
+        <div id="ob-unlocked" style="display:none;align-items:center;gap:8px">
+          <input type="number" id="ob-input" min="0" value="0" oninput="setOB(this.value)"
+            style="width:140px;padding:8px 12px;border-radius:8px;border:2px solid #6dcc88;background:#0a1810;color:#6dcc88;font-size:16px;text-align:center;font-family:inherit;outline:none;font-weight:700">
+          <span style="color:#6dcc88;font-size:14px">جنيه</span>
+          <button onclick="lockOB()" style="background:rgba(40,180,80,0.15);border:1px solid rgba(40,180,80,0.4);color:#6dcc88;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:14px;font-family:inherit;font-weight:700">🔓 قفل</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="month-pills" id="month-pills"></div>
+
+    <div style="background:linear-gradient(90deg,rgba(201,146,10,0.12),transparent);border:1px solid rgba(201,146,10,0.3);border-radius:10px;padding:12px 20px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:20px">🔄</span>
+        <span style="color:#f5d78e;font-size:14px">رصيد أول الشهر:</span>
+        <span id="carry-amount" style="color:#f5d78e;font-weight:900;font-size:17px">0 جنيه</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="color:#8ab;font-size:14px">رصيد آخر الشهر:</span>
+        <span id="end-balance" style="font-weight:900;font-size:17px;color:#6dcc88">0 جنيه</span>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="box box-green">
+        <div class="box-header"><h3 id="income-title">💰 الإيرادات</h3></div>
+        <div class="box-body" id="income-fields"></div>
+      </div>
+      <div class="box box-red">
+        <div class="box-header"><h3 id="expense-title">📊 المصروفات</h3></div>
+        <div class="box-body" id="expense-fields"></div>
+      </div>
+    </div>
+
+    <div id="balance-box" class="balance-box positive">
+      <div style="display:flex;gap:36px;flex-wrap:wrap">
+        <div>
+          <div class="balance-label">💰 إجمالي الإيرادات</div>
+          <div style="font-size:20px;font-weight:900;color:#6dcc88;margin-top:4px" id="bal-inc">0</div>
+        </div>
+        <div>
+          <div class="balance-label">📊 إجمالي المصروفات</div>
+          <div style="font-size:20px;font-weight:900;color:#e07090;margin-top:4px" id="bal-exp">0</div>
+        </div>
+        <div>
+          <div class="balance-label" id="balance-label">🏦 الرصيد المتبقي</div>
+          <div class="balance-amount positive" id="balance-amount">0 جنيه</div>
+        </div>
+      </div>
+      <div style="font-size:46px" id="balance-icon">✅</div>
+    </div>
+
+    <div class="note-section">
+      <div class="note-header"><h3>📝 سجل الصرف التفصيلي</h3></div>
+      <div class="note-body">
+        <div class="form-row">
+          <input id="note-text" type="text" placeholder="البيان..." style="flex:2;min-width:100px">
+          <input id="note-purpose" type="text" placeholder="جهة الصرف..." style="flex:1;min-width:90px">
+          <input id="note-amount" type="number" placeholder="المبلغ" style="width:100px">
+          <button class="btn btn-gold" onclick="addNote()">إضافة</button>
+        </div>
+        <div id="notes-wrap"></div>
+      </div>
+    </div>
+
+    <!-- Export Box -->
+    <div style="background:linear-gradient(135deg,#1a2040,#0f1530);border:2px solid #4a6aaa;border-radius:14px;padding:18px 24px;margin-top:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:28px">🖨️</span>
+          <div>
+            <div style="color:#aac4ff;font-weight:700;font-size:15px">تصدير تقرير شهر <span id="export-month-lbl"></span></div>
+            <div style="color:#8ab;font-size:13px;margin-top:2px">احفظ ملف JSON ثم استخدمه مع السكريبت لإنشاء ملف Excel</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button onclick="exportJSON()" style="padding:11px 22px;border-radius:10px;border:none;background:linear-gradient(135deg,#2a4a9c,#1a3070);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">💾 تصدير JSON</button>
+          <button onclick="showPrintInstructions()" style="padding:11px 22px;border-radius:10px;border:1px solid #4a6aaa;background:transparent;color:#aac4ff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">📋 كيفية الطباعة</button>
+        </div>
+      </div>
+      <div id="print-instructions" style="display:none;margin-top:16px;background:rgba(0,0,0,0.2);border-radius:10px;padding:16px;">
+        <div style="color:#f5d78e;font-weight:700;margin-bottom:10px;font-size:14px">📋 خطوات إنشاء تقرير Excel:</div>
+        <div style="color:#c8d8f0;font-size:13px;line-height:2;">
+          <b style="color:#aac4ff">1.</b> اضغط "تصدير JSON"<br>
+          <b style="color:#aac4ff">2.</b> حط الملفات في نفس المجلد: <code style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:4px">data.json</code> و <code style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:4px">ميزانية_26.xlsx</code> و <code style="background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:4px">generate_report.py</code><br>
+          <b style="color:#aac4ff">3.</b> شغّل:<br>
+          <code style="background:rgba(255,255,255,0.08);padding:6px 12px;border-radius:6px;display:block;margin:6px 0;font-size:13px;direction:ltr;text-align:left;">python3 generate_report.py يناير data.json ميزانية_26.xlsx</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANNUAL TAB -->
+  <div id="tab-annual" class="tab-panel">
+    <h3 style="color:#f5d78e;margin-bottom:20px">📈 ملخص سنوي <span id="annual-year-lbl"></span></h3>
+    <div style="background:linear-gradient(90deg,rgba(40,180,80,0.1),rgba(40,180,80,0.05));border:1px solid rgba(40,180,80,0.3);border-radius:12px;padding:14px 22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:26px">🎉</span>
+        <div>
+          <div style="color:#6dcc88;font-weight:700;font-size:15px">انتهت السنة! جاهز تفتح سنة جديدة؟</div>
+          <div style="color:#8ab;font-size:13px;margin-top:2px">بيانات هذه السنة هتفضل محفوظة</div>
+        </div>
+      </div>
+      <button id="next-year-btn" onclick="openNextYear()" style="padding:12px 26px;border-radius:10px;border:none;background:linear-gradient(135deg,#1a7a3a,#155c2c);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
+        ➕ فتح سنة <span id="next-year-lbl"></span>
+      </button>
+    </div>
+    <table class="annual-table" id="annual-table"></table>
+    <div style="text-align:center;color:#567;font-size:13px;margin-top:12px">اضغط على أي شهر للانتقال إلى تفاصيله</div>
+  </div>
+
+</div><!-- end content -->
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp }                            from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { doc, setDoc, onSnapshot,
+         initializeFirestore, persistentLocalCache,
+         persistentMultipleTabManager }             from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ── Firebase Config ──────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyC0FQzeL_DO4khAGmlgSpDtw9smFWvgRp4",
+  authDomain:        "mezanea-b625a.firebaseapp.com",
+  projectId:         "mezanea-b625a",
+  storageBucket:     "mezanea-b625a.firebasestorage.app",
+  messagingSenderId: "617115424930",
+  appId:             "1:617115424930:web:8fc6522ce91751b3f59ffb"
+};
+
+const app = initializeApp(firebaseConfig);
+
+// Enable offline persistence - new API (no deprecation warning)
+const db = initializeFirestore(app, {
+  cache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+});
+
+const DOC_REF = doc(db, 'church', 'data');
+
+// ── Expose Firebase functions to global scope ────────────────────────────
+let isSyncing = false;
+let saveTimer  = null;
+
+window._fbSave = async function(data) {
+  try {
+    setSyncStatus('syncing');
+    // Firestore has 1MB doc limit — store as JSON string to be safe
+    await setDoc(DOC_REF, { payload: JSON.stringify(data), updatedAt: Date.now() });
+    setSyncStatus('online');
+  } catch(e) {
+    setSyncStatus('offline');
+  }
+};
+
+window._fbListen = function(onData) {
+  onSnapshot(DOC_REF,
+    { includeMetadataChanges: true },
+    (snap) => {
+      // fromCache = true means we're reading local IndexedDB (offline)
+      const fromCache = snap.metadata.fromCache;
+      setSyncStatus(fromCache ? 'offline' : 'online');
+
+      if (snap.exists()) {
+        try {
+          const remote = JSON.parse(snap.data().payload || '{}');
+          onData(remote, fromCache);
+        } catch(e) {}
+      }
+    },
+    (err) => {
+      setSyncStatus('offline');
+    }
+  );
+};
+
+window._manualSync = async function(data) {
+  await window._fbSave(data);
+};
+
+function setSyncStatus(status) {
+  // Header indicator
+  const ind  = document.getElementById('sync-indicator');
+  const txt  = document.getElementById('sync-text');
+  if (!ind) return;
+  ind.className = status;
+  txt.textContent = status === 'online'  ? '☁️ متزامن'     :
+                    status === 'syncing' ? '🔄 جاري المزامنة' :
+                                          '📴 أوفلاين';
+  // Welcome bar
+  const wbar = document.getElementById('welcome-sync-bar');
+  const wdot = document.getElementById('welcome-sync-dot');
+  const wtxt = document.getElementById('welcome-sync-text');
+  if (!wbar) return;
+  wbar.className = 'sync-bar ' + (status === 'online' ? 'online' : status === 'syncing' ? 'syncing' : 'offline');
+  wdot.style.background = status === 'online' ? '#6dcc88' : status === 'syncing' ? '#aac4ff' : '#f5d78e';
+  wtxt.textContent = status === 'online'  ? '☁️ متزامن مع السحابة'        :
+                     status === 'syncing' ? '🔄 جاري المزامنة...'          :
+                                           '📴 أوفلاين - البيانات محفوظة محلياً';
+}
+
+// Signal that Firebase is ready
+window._firebaseReady = true;
+document.dispatchEvent(new Event('firebase-ready'));
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════════════════
+const MONTHS = ["يناير","فبراير","مارس","إبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+const INCOME_FIELDS = ["المرحل","الأشتراكات","الصندوق","الأظرف","القربان","الكانتين","المخبوزات","التبرعات"];
+const EXPENSE_CATS = {
+  "أخوة الرب":  ["عمليات","مساعدات","تعليم","زواج","إيواء","أرامل","أدوية","مباني"],
+  "الخدمة":     ["بركة","مرتبات","أغابي","خدمات","مكتبيات","رحلات","مباني"],
+  "المواصلات":  ["بنزين","أتوبيس","حضانة","صيانة","تجديد"],
+  "المرافق":    ["كهرباء","مياه","نت","غاز"],
+  "أخري":       ["تليفون","مطرانية","تأمين","مجاملات","مؤتمرات","دفاتر","صندوق الطوارئ"]
+};
+const PASSWORD = '191020';
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+let allData    = {};
+let curYear    = null;
+let parishes   = [];
+let activeP    = null;
+let activeMonth = "يناير";
+let budget     = {};
+let openingBal = 0;
+let saveDebounce = null;
+
+// Load from localStorage first (instant, works offline)
+try { allData = JSON.parse(localStorage.getItem('church_data') || '{}'); } catch(e){ allData={}; }
+
+// ══════════════════════════════════════════════════════
+// FIREBASE INTEGRATION
+// ══════════════════════════════════════════════════════
+function initFirebase() {
+  if (!window._fbListen) return;
+
+  // Listen for real-time changes from Firestore
+  window._fbListen((remoteData, fromCache) => {
+    if (!remoteData || Object.keys(remoteData).length === 0) return;
+
+    // Merge: keep remote data but don't override unsaved local changes
+    const merged = { ...remoteData };
+    allData = merged;
+    try { localStorage.setItem('church_data', JSON.stringify(allData)); } catch(e){}
+
+    // Refresh welcome screen if open
+    if (document.getElementById('welcome-screen').style.display !== 'none') {
+      renderWelcome();
+    }
+    // Refresh current year view if user is inside a year
+    if (curYear && allData[curYear]) {
+      const yd = allData[curYear];
+      budget     = yd.budget     || emptyBudget();
+      openingBal = yd.openingBal || 0;
+      parishes   = yd.parishes   || [];
+      if (document.getElementById('tab-parishes').classList.contains('active')) renderParishes();
+    }
+  });
+}
+
+// Save to localStorage + Firebase (debounced 1.5s to avoid hammering)
+function save() {
+  if (!curYear) return;
+  allData[curYear] = { budget, openingBal, parishes };
+  try { localStorage.setItem('church_data', JSON.stringify(allData)); } catch(e){}
+  // Debounce Firebase save
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(() => {
+    if (window._fbSave) window._fbSave(allData);
+  }, 1500);
+}
+
+function manualSync() {
+  if (window._fbSave) {
+    save();
+    window._fbSave(allData);
+    showToast('🔄 جاري المزامنة...');
+  } else {
+    showToast('📴 مفيش إنترنت دلوقتي', true);
+  }
+}
+
+// Init Firebase when ready
+if (window._firebaseReady) {
+  initFirebase();
+} else {
+  document.addEventListener('firebase-ready', initFirebase);
+}
+
+// ══════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════
+function emptyBudget() {
+  const d = {};
+  MONTHS.forEach(m => {
+    d[m] = { income:{}, expenses:{}, notes:[] };
+    INCOME_FIELDS.forEach(f => d[m].income[f] = 0);
+    Object.entries(EXPENSE_CATS).forEach(([cat,fields]) => {
+      d[m].expenses[cat] = {};
+      fields.forEach(f => d[m].expenses[cat][f] = 0);
+    });
+  });
+  return d;
+}
+
+function loadYear(year) {
+  curYear = year;
+  if (allData[year]) {
+    budget     = allData[year].budget     || emptyBudget();
+    openingBal = allData[year].openingBal || 0;
+    parishes   = allData[year].parishes   || [];
+    MONTHS.forEach(m => {
+      if (!budget[m]) budget[m] = { income:{}, expenses:{}, notes:[] };
+      if (!budget[m].notes) budget[m].notes = [];
+      INCOME_FIELDS.forEach(f => { if (budget[m].income[f]===undefined) budget[m].income[f]=0; });
+      Object.entries(EXPENSE_CATS).forEach(([cat,fields]) => {
+        if (!budget[m].expenses[cat]) budget[m].expenses[cat]={};
+        fields.forEach(f => { if (budget[m].expenses[cat][f]===undefined) budget[m].expenses[cat][f]=0; });
+      });
+    });
+  } else {
+    budget=emptyBudget(); openingBal=0; parishes=[];
+    allData[year]={budget,openingBal,parishes};
+    try { localStorage.setItem('church_data',JSON.stringify(allData)); } catch(e){}
+  }
+  activeMonth="يناير"; activeP=null;
+}
+
+function totalIncome(m)  { return Object.values(budget[m].income).reduce((a,b)=>a+b,0); }
+function totalCat(m,cat) { return Object.values(budget[m].expenses[cat]).reduce((a,b)=>a+b,0); }
+function totalExp(m)     { return Object.keys(EXPENSE_CATS).reduce((s,c)=>s+totalCat(m,c),0); }
+function getCarry(m)     { const i=MONTHS.indexOf(m); return i===0?openingBal:getEnd(MONTHS[i-1]); }
+function getEnd(m)       { return getCarry(m)+totalIncome(m)-totalExp(m); }
+
+// ══════════════════════════════════════════════════════
+// WELCOME
+// ══════════════════════════════════════════════════════
+function renderWelcome() {
+  const grid  = document.getElementById('year-grid');
+  const saved = Object.keys(allData).map(Number).sort();
+  const years = [...new Set([2026,...saved])].sort();
+  const maxY  = years[years.length-1];
+  let html = years.map(y => {
+    const has = !!allData[y];
+    return `<button class="year-btn ${has?'saved':''}" onclick="selectYear(${y})">${y}<br><span style="font-size:12px;font-weight:400">${has?'✅ محفوظة':'جديدة'}</span></button>`;
+  }).join('');
+  if (!years.includes(maxY+1))
+    html += `<button class="new-year-btn" onclick="selectYear(${maxY+1})">➕ ${maxY+1}<br><span style="font-size:11px">سنة جديدة</span></button>`;
+  grid.innerHTML = html;
+}
+
+function selectYear(year) {
+  loadYear(year);
+  document.getElementById('welcome-screen').style.display='none';
+  document.getElementById('header-year').textContent=year;
+  document.getElementById('annual-year-lbl').textContent=year;
+  document.getElementById('next-year-lbl').textContent=year+1;
+  document.getElementById('ob-input').value=openingBal;
+  document.getElementById('ob-display').textContent=openingBal.toLocaleString()+' جنيه';
+  document.getElementById('ob-locked').style.display='flex';
+  document.getElementById('ob-unlocked').style.display='none';
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-parishes').classList.add('active');
+  document.querySelectorAll('.tab-btn')[0].classList.add('active');
+  renderParishes();
+}
+
+function goWelcome() {
+  save();
+  renderWelcome();
+  document.getElementById('welcome-screen').style.display='flex';
+}
+
+function openNextYear() {
+  save();
+  const nextY=curYear+1, carry=getEnd(MONTHS[11]);
+  loadYear(nextY);
+  openingBal=carry; budget=emptyBudget();
+  allData[nextY]={budget,openingBal,parishes:JSON.parse(JSON.stringify(parishes))};
+  try { localStorage.setItem('church_data',JSON.stringify(allData)); } catch(e){}
+  if (window._fbSave) window._fbSave(allData);
+  selectYear(nextY);
+}
+
+// ══════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════
+function showTab(tab,btn) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab==='budget') renderBudget();
+  if (tab==='annual') renderAnnual();
+  save();
+}
+
+// ══════════════════════════════════════════════════════
+// PARISHES
+// ══════════════════════════════════════════════════════
+function addParish() {
+  const inp=document.getElementById('new-parish-name'),name=inp.value.trim();
+  if(!name)return;
+  parishes.push({id:Date.now(),name,families:[]});
+  inp.value=''; renderParishes(); save();
+}
+function removeParish(id) {
+  parishes=parishes.filter(p=>p.id!==id);
+  if(activeP===id)activeP=null;
+  renderParishes(); save();
+}
+function toggleParish(id){ activeP=activeP===id?null:id; renderParishes(); }
+function addFamily(pid) {
+  const n=document.getElementById('fn-'+pid).value.trim();
+  const c=parseInt(document.getElementById('fc-'+pid).value);
+  if(!n||!c||c<1)return;
+  parishes=parishes.map(p=>p.id===pid?{...p,families:[...p.families,{id:Date.now(),name:n,count:c}]}:p);
+  document.getElementById('fn-'+pid).value='';
+  document.getElementById('fc-'+pid).value='';
+  renderParishes(); save();
+}
+function removeFamily(pid,fid) {
+  parishes=parishes.map(p=>p.id===pid?{...p,families:p.families.filter(f=>f.id!==fid)}:p);
+  renderParishes(); save();
+}
+function pTot(p){ return{fam:p.families.length,mem:p.families.reduce((s,f)=>s+f.count,0)}; }
+
+function renderParishes() {
+  const allF=parishes.reduce((s,p)=>s+p.families.length,0);
+  const allM=parishes.reduce((s,p)=>s+pTot(p).mem,0);
+  document.getElementById('total-parishes').textContent=parishes.length;
+  document.getElementById('total-families').textContent=allF;
+  document.getElementById('total-members').textContent=allM;
+  const cont=document.getElementById('parishes-list');
+  if(!parishes.length){ cont.innerHTML='<div class="empty-state"><div class="empty-icon">🏛</div>لم يتم إضافة شعب بعد</div>'; return; }
+  cont.innerHTML=parishes.map(p=>{
+    const t=pTot(p),open=activeP===p.id;
+    const famTable=p.families.length===0
+      ?'<div style="text-align:center;color:#567;padding:14px;font-size:14px">لم تتم إضافة أسر بعد</div>'
+      :`<table class="data-table" style="margin-top:10px">
+          <thead><tr><th style="width:36px">#</th><th>اسم الأسرة</th><th style="text-align:center">عدد الأفراد</th><th style="text-align:center">حذف</th></tr></thead>
+          <tbody>
+            ${p.families.map((f,i)=>`<tr>
+              <td style="color:#567">${i+1}</td>
+              <td style="color:#e8d5b7;font-weight:500">${f.name}</td>
+              <td style="text-align:center"><span class="badge-blue">${f.count}</span></td>
+              <td style="text-align:center"><button class="btn-del" onclick="removeFamily(${p.id},${f.id})">حذف</button></td>
+            </tr>`).join('')}
+            <tr class="total-tr"><td colspan="2">الإجمالي</td><td style="text-align:center"><span class="badge-gold">${t.mem}</span></td><td></td></tr>
+          </tbody>
+        </table>`;
+    return `<div class="parish-card ${open?'open':''}">
+      <div class="parish-header" onclick="toggleParish(${p.id})">
+        <div class="parish-title">
+          <span style="font-size:24px">🏛</span>
+          <div><h4>${p.name}</h4><p>${t.fam} أسرة · ${t.mem} فرد</p></div>
+        </div>
+        <div class="parish-stats">
+          <div class="stat-badge gold"><div class="num">${t.fam}</div><div class="lbl">أسرة</div></div>
+          <div class="stat-badge blue"><div class="num">${t.mem}</div><div class="lbl">فرد</div></div>
+          <button class="btn-red" onclick="event.stopPropagation();removeParish(${p.id})">حذف</button>
+          <span style="color:#c9920a;font-size:20px">${open?'▲':'▼'}</span>
+        </div>
+      </div>
+      <div class="parish-body ${open?'open':''}">
+        <div class="form-row" style="margin-top:14px">
+          <input id="fn-${p.id}" type="text" placeholder="اسم الأسرة..." style="flex:2;min-width:110px" onkeydown="if(event.key==='Enter')addFamily(${p.id})">
+          <input id="fc-${p.id}" type="number" placeholder="عدد الأفراد" min="1" style="width:120px">
+          <button class="btn btn-green" onclick="addFamily(${p.id})">+ إضافة أسرة</button>
+        </div>
+        ${famTable}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// PASSWORD
+// ══════════════════════════════════════════════════════
+function unlockOB(){
+  document.getElementById('pw-input').value='';
+  document.getElementById('pw-error').textContent='';
+  document.getElementById('pw-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('pw-input').focus(),100);
+}
+function checkPw(){
+  if(document.getElementById('pw-input').value===PASSWORD){
+    document.getElementById('pw-modal').style.display='none';
+    document.getElementById('ob-locked').style.display='none';
+    document.getElementById('ob-unlocked').style.display='flex';
+    document.getElementById('ob-input').focus();
+  }else{
+    document.getElementById('pw-error').textContent='❌ كلمة المرور غلط';
+    document.getElementById('pw-input').value='';
+  }
+}
+function closePw(){ document.getElementById('pw-modal').style.display='none'; }
+function lockOB(){
+  document.getElementById('ob-unlocked').style.display='none';
+  document.getElementById('ob-locked').style.display='flex';
+  document.getElementById('ob-display').textContent=openingBal.toLocaleString()+' جنيه';
+  save();
+}
+function setOB(v){ openingBal=parseFloat(v)||0; refreshBal(); }
+
+// ══════════════════════════════════════════════════════
+// BUDGET
+// ══════════════════════════════════════════════════════
+function renderBudget(){
+  document.getElementById('month-pills').innerHTML=MONTHS.map(m=>
+    `<button class="month-pill ${m===activeMonth?'active':''}" onclick="pickMonth('${m}')">${m}</button>`).join('');
+  document.getElementById('income-title').textContent=`💰 الإيرادات - ${activeMonth}`;
+  document.getElementById('expense-title').textContent=`📊 المصروفات - ${activeMonth}`;
+  const lbl=document.getElementById('export-month-lbl');
+  if(lbl)lbl.textContent=activeMonth;
+
+  document.getElementById('income-fields').innerHTML=
+    INCOME_FIELDS.map(f=>`<div class="input-row"><label>${f}</label>
+      <input type="number" min="0" value="${budget[activeMonth].income[f]}" oninput="setInc('${f}',this.value)"></div>`).join('')+
+    `<div class="total-row"><span style="color:#6dcc88;font-weight:700">إجمالي الإيرادات</span>
+     <span style="color:#6dcc88;font-weight:900;font-size:17px" id="inc-total">0</span></div>`;
+
+  let expHtml='';
+  Object.entries(EXPENSE_CATS).forEach(([cat,fields])=>{
+    expHtml+=`<div class="cat-header">${cat}</div>`;
+    fields.forEach(f=>{ expHtml+=`<div class="input-row input-row-red"><label>${f}</label>
+      <input type="number" min="0" value="${budget[activeMonth].expenses[cat][f]}" oninput="setExp('${cat}','${f}',this.value)"></div>`; });
+    expHtml+=`<div class="subtotal"><span>مجموع ${cat}</span><span id="cat-${cat.replace(/\s/g,'_')}">${totalCat(activeMonth,cat).toLocaleString()}</span></div>`;
+  });
+  expHtml+=`<div class="total-row total-row-red"><span style="color:#e07090;font-weight:700">إجمالي المصروفات</span>
+    <span style="color:#e07090;font-weight:900;font-size:17px" id="exp-total">0</span></div>`;
+  document.getElementById('expense-fields').innerHTML=expHtml;
+
+  refreshBal(); renderNotes();
+}
+
+function setInc(f,v){ budget[activeMonth].income[f]=parseFloat(v)||0; refreshBal(); save(); }
+function setExp(cat,f,v){ budget[activeMonth].expenses[cat][f]=parseFloat(v)||0; refreshBal(); save(); }
+
+function refreshBal(){
+  const inc=totalIncome(activeMonth),exp=totalExp(activeMonth);
+  const carry=getCarry(activeMonth),end=carry+inc-exp;
+  document.getElementById('carry-amount').textContent=carry.toLocaleString()+' جنيه';
+  const endEl=document.getElementById('end-balance');
+  endEl.textContent=Math.abs(end).toLocaleString()+' جنيه';
+  endEl.style.color=end>=0?'#6dcc88':'#e07090';
+  document.getElementById('balance-box').className='balance-box '+(end>=0?'positive':'negative');
+  const ba=document.getElementById('balance-amount');
+  ba.className='balance-amount '+(end>=0?'positive':'negative');
+  ba.textContent=Math.abs(end).toLocaleString()+' جنيه';
+  document.getElementById('balance-icon').textContent=end>=0?'✅':'⚠️';
+  document.getElementById('balance-label').textContent=`🏦 الرصيد المتبقي - ${activeMonth}`;
+  document.getElementById('bal-inc').textContent=inc.toLocaleString();
+  document.getElementById('bal-exp').textContent=exp.toLocaleString();
+  const it=document.getElementById('inc-total'),et=document.getElementById('exp-total');
+  if(it)it.textContent=inc.toLocaleString();
+  if(et)et.textContent=exp.toLocaleString();
+  Object.keys(EXPENSE_CATS).forEach(cat=>{
+    const el=document.getElementById('cat-'+cat.replace(/\s/g,'_'));
+    if(el)el.textContent=totalCat(activeMonth,cat).toLocaleString();
+  });
+}
+
+function pickMonth(m){ activeMonth=m; renderBudget(); }
+
+// ══════════════════════════════════════════════════════
+// NOTES
+// ══════════════════════════════════════════════════════
+function addNote(){
+  const text=document.getElementById('note-text').value.trim();
+  const purpose=document.getElementById('note-purpose').value.trim();
+  const amount=parseFloat(document.getElementById('note-amount').value)||0;
+  if(!text)return;
+  budget[activeMonth].notes.push({id:Date.now(),text,purpose,amount});
+  document.getElementById('note-text').value='';
+  document.getElementById('note-purpose').value='';
+  document.getElementById('note-amount').value='';
+  renderNotes(); save();
+}
+function removeNote(id){ budget[activeMonth].notes=budget[activeMonth].notes.filter(n=>n.id!==id); renderNotes(); save(); }
+function renderNotes(){
+  const wrap=document.getElementById('notes-wrap'),notes=budget[activeMonth].notes;
+  if(!notes.length){ wrap.innerHTML='<div style="text-align:center;color:#456;padding:14px;font-size:14px">لا يوجد سجلات صرف</div>'; return; }
+  wrap.innerHTML=`<table class="data-table"><thead><tr>
+    <th style="width:36px">#</th><th>البيان</th><th>جهة الصرف</th><th style="text-align:center">المبلغ</th><th></th>
+  </tr></thead><tbody>${notes.map((n,i)=>`<tr>
+    <td style="color:#567">${i+1}</td><td style="color:#e8d5b7">${n.text}</td><td style="color:#9ab">${n.purpose}</td>
+    <td style="text-align:center;color:#f5d78e;font-weight:700">${n.amount.toLocaleString()}</td>
+    <td><button class="btn-del" onclick="removeNote(${n.id})">×</button></td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+// ══════════════════════════════════════════════════════
+// ANNUAL
+// ══════════════════════════════════════════════════════
+function renderAnnual(){
+  document.getElementById('next-year-lbl').textContent=curYear+1;
+  let tInc=0,tExp=0;
+  const rows=MONTHS.map(m=>{
+    const carry=getCarry(m),inc=totalIncome(m),exp=totalExp(m),end=carry+inc-exp;
+    tInc+=inc; tExp+=exp;
+    return `<tr onclick="jumpMonth('${m}')">
+      <td style="color:#e8d5b7;font-weight:600">${m}</td>
+      <td style="color:#f5d78e;font-weight:600">${carry.toLocaleString()}</td>
+      <td style="color:#6dcc88;font-weight:600">${inc.toLocaleString()}</td>
+      <td style="color:#e07090;font-weight:600">${exp.toLocaleString()}</td>
+      <td style="color:${end>=0?'#6dcc88':'#e07090'};font-weight:700">${end.toLocaleString()}</td>
+    </tr>`;
+  }).join('');
+  const finalBal=getEnd(MONTHS[11]);
+  document.getElementById('annual-table').innerHTML=`
+    <thead><tr><th>الشهر</th><th>رصيد أول الشهر</th><th>الإيرادات</th><th>المصروفات</th><th>رصيد آخر الشهر</th></tr></thead>
+    <tbody>${rows}
+    <tr class="total-tr">
+      <td>الإجمالي</td><td>${openingBal.toLocaleString()}</td>
+      <td style="color:#6dcc88">${tInc.toLocaleString()}</td>
+      <td style="color:#e07090">${tExp.toLocaleString()}</td>
+      <td style="color:${finalBal>=0?'#6dcc88':'#e07090'}">${finalBal.toLocaleString()}</td>
+    </tr></tbody>`;
+}
+
+function jumpMonth(m){
+  activeMonth=m;
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-budget').classList.add('active');
+  document.querySelectorAll('.tab-btn')[1].classList.add('active');
+  renderBudget();
+}
+
+// ══════════════════════════════════════════════════════
+// BACKUP & RESTORE
+// ══════════════════════════════════════════════════════
+function exportBackup() {
+  save();
+  const now=new Date();
+  const ds=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  const blob=new Blob([JSON.stringify(allData,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`church_backup_${ds}.json`;
+  a.click();
+  showToast('✅ تم تحميل النسخة الاحتياطية!');
+}
+
+let pendingRestoreData=null;
+function importBackup(input){
+  const file=input.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const parsed=JSON.parse(e.target.result);
+      if(Object.keys(parsed).length===0) throw new Error('empty');
+      pendingRestoreData=parsed;
+      document.getElementById('restore-filename').textContent=file.name;
+      document.getElementById('restore-modal').style.display='flex';
+    }catch(err){ showToast('❌ الملف مش صح أو تالف!',true); }
+    input.value='';
+  };
+  reader.readAsText(file,'utf-8');
+}
+function confirmRestore(){
+  if(!pendingRestoreData)return;
+  allData=pendingRestoreData;
+  try{ localStorage.setItem('church_data',JSON.stringify(allData)); }catch(e){}
+  if(window._fbSave) window._fbSave(allData);
+  pendingRestoreData=null;
+  document.getElementById('restore-modal').style.display='none';
+  curYear=null;
+  renderWelcome();
+  document.getElementById('welcome-screen').style.display='flex';
+  showToast('✅ تم الاسترداد وزامن مع السحابة!');
+}
+function cancelRestore(){
+  pendingRestoreData=null;
+  document.getElementById('restore-modal').style.display='none';
+}
+
+// ══════════════════════════════════════════════════════
+// EXPORT JSON
+// ══════════════════════════════════════════════════════
+function exportJSON(){
+  save();
+  const blob=new Blob([JSON.stringify(allData,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`church_data_${curYear}.json`;
+  a.click();
+}
+function showPrintInstructions(){
+  const el=document.getElementById('print-instructions');
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+
+// ══════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════
+function showToast(msg,isError=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.background=isError?'#3a1020':'#1a3a20';
+  t.style.border=`1px solid ${isError?'#7a2030':'#2a7a3a'}`;
+  t.style.color=isError?'#e07090':'#6dcc88';
+  t.style.display='block';
+  setTimeout(()=>t.style.display='none',3000);
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+renderWelcome();
+</script>
+</body>
+</html>
