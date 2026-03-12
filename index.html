@@ -8,6 +8,35 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0f1b2d 0%, #1a2d4a 50%, #0d2137 100%); color: #e8d5b7; }
 
+
+
+
+/* ════ LOGIN ════ */
+#login-screen { position:fixed; inset:0; z-index:99999; background:linear-gradient(135deg,#0a1520,#0f1b2d); display:flex; align-items:center; justify-content:center; }
+.login-box { width:90%; max-width:400px; background:linear-gradient(135deg,#162535,#0f1e2e); border:2px solid #c9920a; border-radius:24px; padding:44px 44px 36px; box-shadow:0 20px 60px rgba(0,0,0,0.7); text-align:center; }
+.login-cross { font-size:60px; animation:pglow 2s ease-in-out infinite alternate; margin-bottom:10px; }
+.login-title { font-size:22px; font-weight:900; color:#f5d78e; margin-bottom:4px; }
+.login-sub { color:#8ab; font-size:13px; margin-bottom:26px; }
+.lbl { text-align:right; color:#9ab; font-size:13px; margin-bottom:5px; margin-top:14px; }
+.linput { width:100%; padding:11px 14px; border-radius:9px; border:1.5px solid #3a5a8c; background:#0a1420; color:#e8d5b7; font-size:15px; font-family:inherit; outline:none; transition:border-color 0.2s; }
+.linput:focus { border-color:#c9920a; }
+.login-error { color:#e07090; font-size:13px; min-height:18px; margin:10px 0 4px; }
+.login-btn { width:100%; padding:13px; border-radius:10px; border:none; background:linear-gradient(135deg,#c9920a,#8b6914); color:#fff; font-size:16px; font-weight:900; cursor:pointer; font-family:inherit; margin-top:18px; transition:all 0.2s; }
+.login-btn:hover { transform:scale(1.02); box-shadow:0 4px 20px rgba(201,146,10,0.3); }
+/* role badge */
+.role-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; font-size:12px; font-weight:700; }
+.role-badge.admin  { background:rgba(201,146,10,0.2);  color:#f5d78e; border:1px solid rgba(201,146,10,0.4); }
+.role-badge.viewer { background:rgba(100,180,255,0.12); color:#7bc;    border:1px solid rgba(100,180,255,0.3); }
+/* Users management modal */
+#users-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; }
+.users-box { background:linear-gradient(135deg,#162535,#0f1e2e); border:2px solid #c9920a; border-radius:18px; padding:28px 30px; width:90%; max-width:520px; max-height:80vh; overflow-y:auto; }
+.users-box h3 { color:#f5d78e; font-size:17px; margin-bottom:18px; }
+.user-row { display:flex; align-items:center; justify-content:space-between; padding:9px 14px; background:rgba(255,255,255,0.03); border:1px solid #1e3a55; border-radius:9px; margin-bottom:8px; gap:10px; }
+.user-name { color:#e8d5b7; font-weight:700; font-size:14px; }
+.user-role-badge { padding:3px 12px; border-radius:12px; font-size:12px; font-weight:700; }
+.user-role-badge.admin  { background:rgba(201,146,10,0.2);  color:#f5d78e; }
+.user-role-badge.viewer { background:rgba(100,180,255,0.12); color:#7bc; }
+
 /* WELCOME */
 #welcome-screen { position:fixed; inset:0; z-index:9999; background:linear-gradient(135deg,#0a1520,#0f1b2d); display:flex; align-items:center; justify-content:center; }
 .welcome-box { text-align:center; padding:50px 60px; background:linear-gradient(135deg,#162535,#0f1e2e); border:2px solid #c9920a; border-radius:24px; box-shadow:0 20px 60px rgba(0,0,0,0.7); max-width:560px; width:90%; }
@@ -169,6 +198,43 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; backgroun
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-cross">✝</div>
+    <div class="login-title">نظام إدارة الكنيسة</div>
+    <div class="login-sub">سجّل دخولك للمتابعة</div>
+    <div class="lbl">اسم المستخدم</div>
+    <input id="login-username" class="linput" type="text" placeholder="اسم المستخدم..."
+      onkeydown="if(event.key==='Enter')document.getElementById('login-password').focus()">
+    <div class="lbl">كلمة المرور</div>
+    <input id="login-password" class="linput" type="password" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-error" id="login-error"></div>
+    <button class="login-btn" onclick="doLogin()">🔓 دخول</button>
+  </div>
+</div>
+
+<!-- USERS MODAL -->
+<div id="users-modal">
+  <div class="users-box">
+    <h3>👥 إدارة المستخدمين</h3>
+    <div id="users-list"></div>
+    <div style="margin-top:20px;border-top:1px solid #1e3a55;padding-top:18px">
+      <div style="color:#f5d78e;font-weight:700;font-size:14px;margin-bottom:12px">➕ إضافة مستخدم جديد</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <input id="new-user-name" class="linput" type="text" placeholder="اسم المستخدم...">
+        <input id="new-user-pw" class="linput" type="password" placeholder="كلمة المرور...">
+        <div style="display:flex;gap:10px">
+          <button onclick="createUser('admin')" style="flex:1;padding:10px;border-radius:8px;border:none;background:linear-gradient(135deg,#c9920a,#8b6914);color:#fff;font-weight:700;cursor:pointer;font-family:inherit;font-size:13px">👑 مدير</button>
+          <button onclick="createUser('viewer')" style="flex:1;padding:10px;border-radius:8px;border:none;background:linear-gradient(135deg,#2a5a9c,#1a3a70);color:#fff;font-weight:700;cursor:pointer;font-family:inherit;font-size:13px">👁️ مشرف</button>
+        </div>
+      </div>
+    </div>
+    <button onclick="closeUsersModal()" style="width:100%;margin-top:16px;padding:10px;border-radius:8px;border:1px solid #3a5a8c;background:transparent;color:#9ab;cursor:pointer;font-family:inherit;font-size:14px">إغلاق</button>
+  </div>
+</div>
+
 <!-- WELCOME SCREEN -->
 <div id="welcome-screen">
   <div class="welcome-box">
@@ -231,19 +297,22 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; backgroun
       <div id="sync-dot"></div>
       <span id="sync-text">أوفلاين</span>
     </div>
-    <button onclick="goWelcome()" class="hbtn" style="border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.2);color:#fff;">🏠 السنوات</button>
+    <div id="role-badge-header" class="role-badge admin" style="cursor:default">👑 مدير</div>
+    <button onclick="goWelcome()" class="hbtn allow-viewer" style="border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.2);color:#fff;">🏠 السنوات</button>
+    <button id="manage-users-btn" onclick="openUsersModal()" class="hbtn" style="border:1px solid rgba(201,146,10,0.5);background:rgba(100,70,0,0.3);color:#f5d78e;">👥 المستخدمين</button>
     <button onclick="exportBackup()" class="hbtn" style="border:1px solid rgba(100,220,130,0.5);background:rgba(20,100,40,0.3);color:#6dcc88;">📤 احتياطي</button>
     <button onclick="document.getElementById('restore-input').click()" class="hbtn" style="border:1px solid rgba(100,160,255,0.5);background:rgba(20,50,120,0.3);color:#aac4ff;">📥 استرداد</button>
     <input type="file" id="restore-input" accept=".json" style="display:none" onchange="importBackup(this)">
+    <button onclick="doLogout()" class="hbtn allow-viewer" style="border:1px solid rgba(255,100,100,0.4);background:rgba(150,20,20,0.2);color:#f88;">🚪 خروج</button>
   </div>
 </div>
 
 <!-- TABS -->
 <div class="tabs">
   <div class="tabs-inner">
-    <button class="tab-btn active" onclick="showTab('parishes',this)">الشعب</button>
-    <button class="tab-btn" onclick="showTab('budget',this)">الميزانية الشهرية</button>
-    <button class="tab-btn" onclick="showTab('annual',this)">ملخص سنوي</button>
+    <button class="tab-btn active allow-viewer" onclick="showTab('parishes',this)">الشعب</button>
+    <button class="tab-btn allow-viewer" onclick="showTab('budget',this)">الميزانية الشهرية</button>
+    <button class="tab-btn allow-viewer" onclick="showTab('annual',this)">ملخص سنوي</button>
   </div>
 </div>
 
@@ -255,6 +324,11 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; backgroun
       <div class="card"><div class="card-icon">🏛</div><div class="card-value" id="total-parishes">0</div><div class="card-label">إجمالي الشعب</div></div>
       <div class="card"><div class="card-icon">🏠</div><div class="card-value" id="total-families">0</div><div class="card-label">إجمالي الأسر</div></div>
       <div class="card"><div class="card-icon">👥</div><div class="card-value" id="total-members">0</div><div class="card-label">إجمالي الأفراد</div></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+      <button onclick="printParishesReport()" class="allow-viewer" style="padding:10px 22px;border-radius:10px;border:none;background:linear-gradient(135deg,#8b6914,#c9920a);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;">
+        🖨️ طباعة تقرير الشعب
+      </button>
     </div>
     <div class="box" style="margin-bottom:22px">
       <div class="box-header"><h3 style="color:#f5d78e;font-size:15px">➕ إضافة شعبة جديدة</h3></div>
@@ -310,11 +384,17 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; backgroun
 
     <div class="grid-2">
       <div class="box box-green">
-        <div class="box-header"><h3 id="income-title">💰 الإيرادات</h3></div>
+        <div class="box-header" style="display:flex;align-items:center;justify-content:space-between;gap:10px"><h3 id="income-title">💰 الإيرادات</h3><button onclick="addCustomIncome()" style="padding:4px 12px;border-radius:6px;border:1px solid rgba(100,220,130,0.5);background:rgba(20,100,40,0.2);color:#6dcc88;cursor:pointer;font-size:13px;font-family:inherit;font-weight:700;white-space:nowrap">➕ خانة جديدة</button></div>
         <div class="box-body" id="income-fields"></div>
       </div>
       <div class="box box-red">
-        <div class="box-header"><h3 id="expense-title">📊 المصروفات</h3></div>
+        <div class="box-header" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <h3 id="expense-title">📊 المصروفات</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button onclick="addCustomExpenseCat()" style="padding:4px 12px;border-radius:6px;border:1px solid rgba(220,100,100,0.5);background:rgba(180,40,80,0.15);color:#e07090;cursor:pointer;font-size:13px;font-family:inherit;font-weight:700;white-space:nowrap">➕ قسم جديد</button>
+            <button onclick="resetExpenses()" style="padding:4px 12px;border-radius:6px;border:1px solid rgba(200,50,50,0.5);background:rgba(150,20,20,0.2);color:#f88;cursor:pointer;font-size:13px;font-family:inherit;font-weight:700;white-space:nowrap">🗑️ مسح الكل</button>
+          </div>
+        </div>
         <div class="box-body" id="expense-fields"></div>
       </div>
     </div>
@@ -348,6 +428,13 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; backgroun
         </div>
         <div id="notes-wrap"></div>
       </div>
+    </div>
+
+    <!-- Print Budget Button -->
+    <div style="display:flex;justify-content:flex-end;margin-top:20px;">
+      <button onclick="printBudgetReport()" class="allow-viewer" style="padding:10px 22px;border-radius:10px;border:none;background:linear-gradient(135deg,#8b6914,#c9920a);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;">
+        🖨️ طباعة تقرير الميزانية
+      </button>
     </div>
 
     <!-- Export Box -->
@@ -388,7 +475,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; backgroun
           <div style="color:#8ab;font-size:13px;margin-top:2px">بيانات هذه السنة هتفضل محفوظة</div>
         </div>
       </div>
-      <button id="next-year-btn" onclick="openNextYear()" style="padding:12px 26px;border-radius:10px;border:none;background:linear-gradient(135deg,#1a7a3a,#155c2c);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
+      <button id="next-year-btn" onclick="openNextYear()" id="next-year-btn-el" style="padding:12px 26px;border-radius:10px;border:none;background:linear-gradient(135deg,#1a7a3a,#155c2c);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
         ➕ فتح سنة <span id="next-year-lbl"></span>
       </button>
     </div>
@@ -494,15 +581,173 @@ document.dispatchEvent(new Event('firebase-ready'));
 // ══════════════════════════════════════════════════════
 // CONSTANTS
 // ══════════════════════════════════════════════════════
+
+/* ══════════════════════════════════════════════════════
+   LOGIN & USERS SYSTEM
+══════════════════════════════════════════════════════ */
+let currentUser = null; // { username, role }
+// Default admin — always exists
+const DEFAULT_ADMIN = { username: 'admin', password: '191020', role: 'admin' };
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem('church_users') || 'null') || [DEFAULT_ADMIN]; }
+  catch(e) { return [DEFAULT_ADMIN]; }
+}
+function saveUsers(users) {
+  localStorage.setItem('church_users', JSON.stringify(users));
+}
+
+function doLogin() {
+  const uname = document.getElementById('login-username').value.trim();
+  const pw    = document.getElementById('login-password').value;
+  const err   = document.getElementById('login-error');
+  if (!uname || !pw) { err.textContent = '❌ ادخل اسم المستخدم وكلمة المرور'; return; }
+  const users = getUsers();
+  const user  = users.find(u => u.username === uname && u.password === pw);
+  if (!user) { err.textContent = '❌ اسم المستخدم أو كلمة المرور غلط'; document.getElementById('login-password').value = ''; return; }
+  currentUser = user;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  err.textContent = '';
+  // Reload latest allData from localStorage — Firebase listener may have already loaded fresh data
+  try { allData = JSON.parse(localStorage.getItem('church_data') || '{}'); } catch(e){ allData={}; }
+  // Show welcome screen
+  document.getElementById('welcome-screen').style.display = 'flex';
+  renderWelcome();
+  applyRole();
+  showToast(`✅ أهلاً ${user.username}!`);
+}
+
+function doLogout() {
+  currentUser = null;
+  // Hide app screens
+  document.getElementById('welcome-screen').style.display = 'none';
+  document.body.classList.remove('viewer-mode');
+  // Clear fields and show login
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-error').textContent = '';
+  document.getElementById('login-screen').style.display = 'flex';
+  setTimeout(()=>document.getElementById('login-username').focus(), 100);
+}
+
+function applyRole() {
+  if (!currentUser) return;
+  const isViewer = currentUser.role === 'viewer';
+  document.body.classList.toggle('viewer-mode', isViewer);
+
+  // Badge
+  const badge = document.getElementById('role-badge-header');
+  if (badge) {
+    badge.className = 'role-badge ' + (isViewer ? 'viewer' : 'admin');
+    badge.textContent = isViewer ? `👁️ ${currentUser.username}` : `👑 ${currentUser.username}`;
+  }
+  // Users management button — admins only
+  const manageBtn = document.getElementById('manage-users-btn');
+  if (manageBtn) manageBtn.style.display = isViewer ? 'none' : '';
+
+  // Backup/restore — admins only
+  const backupBtn = document.querySelector('button[onclick="exportBackup()"]');
+  const restoreBtn = document.querySelector('button[onclick*="restore-input"]');
+  if (backupBtn) backupBtn.style.display = isViewer ? 'none' : '';
+  if (restoreBtn) restoreBtn.style.display = isViewer ? 'none' : '';
+
+  // Disable edit inputs/buttons for viewer
+  setTimeout(() => {
+    if (isViewer) {
+      // Disable all inputs except search/nav
+      document.querySelectorAll('input:not(#login-username):not(#login-password):not(.linput)').forEach(el => {
+        el.disabled = true;
+        el.style.opacity = '0.6';
+        el.style.cursor  = 'not-allowed';
+      });
+      // Disable all buttons except allow-viewer
+      document.querySelectorAll('button').forEach(el => {
+        if (el.classList.contains('allow-viewer')) {
+          el.disabled = false;
+          el.style.opacity = '';
+          el.style.cursor  = '';
+        } else {
+          el.disabled = true;
+          el.style.opacity = '0.35';
+          el.style.cursor  = 'not-allowed';
+        }
+      });
+    } else {
+      // Admin: enable everything
+      document.querySelectorAll('input, button').forEach(el => {
+        el.disabled = false;
+        el.style.opacity = '';
+        el.style.cursor  = '';
+      });
+    }
+  }, 80);
+}
+
+/* ── Users Modal ── */
+function openUsersModal() {
+  renderUsersList();
+  document.getElementById('users-modal').style.display = 'flex';
+}
+function closeUsersModal() {
+  document.getElementById('users-modal').style.display = 'none';
+  document.getElementById('new-user-name').value = '';
+  document.getElementById('new-user-pw').value   = '';
+}
+
+function renderUsersList() {
+  const users = getUsers();
+  const list  = document.getElementById('users-list');
+  list.innerHTML = users.map(u => {
+    const isDefault = u.username === 'admin';
+    return `<div class="user-row">
+      <div>
+        <div class="user-name">${u.username}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="user-role-badge ${u.role}">${u.role==='admin'?'👑 مدير':'👁️ مشرف'}</span>
+        ${!isDefault ? `<button onclick="deleteUser('${u.username}')"
+          style="padding:3px 10px;border-radius:6px;border:1px solid rgba(200,50,50,0.3);background:rgba(200,50,50,0.1);color:#f77;cursor:pointer;font-size:12px">حذف</button>` : '<span style="color:#567;font-size:11px">افتراضي</span>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function createUser(role) {
+  const name = document.getElementById('new-user-name').value.trim();
+  const pw   = document.getElementById('new-user-pw').value;
+  if (!name || !pw) { showToast('❌ ادخل الاسم وكلمة المرور', true); return; }
+  const users = getUsers();
+  if (users.find(u => u.username === name)) { showToast('❌ الاسم ده موجود بالفعل!', true); return; }
+  users.push({ username: name, password: pw, role });
+  saveUsers(users);
+  document.getElementById('new-user-name').value = '';
+  document.getElementById('new-user-pw').value   = '';
+  renderUsersList();
+  showToast(`✅ تم إضافة "${name}" كـ${role==='admin'?'مدير':'مشرف'}`);
+}
+
+function deleteUser(username) {
+  if (!confirm(`هتحذف المستخدم "${username}". متأكد؟`)) return;
+  const users = getUsers().filter(u => u.username !== username);
+  saveUsers(users);
+  renderUsersList();
+  showToast(`🗑️ تم حذف "${username}"`);
+}
+
+
 const MONTHS = ["يناير","فبراير","مارس","إبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
-const INCOME_FIELDS = ["المرحل","الأشتراكات","الصندوق","الأظرف","القربان","الكانتين","المخبوزات","التبرعات"];
-const EXPENSE_CATS = {
+let INCOME_FIELDS = ["المرحل","الأشتراكات","الصندوق","الأظرف","القربان","الكانتين","المخبوزات","التبرعات"];
+let CUSTOM_INCOME = []; // extra income fields added by user
+let EXPENSE_CATS = {
   "أخوة الرب":  ["عمليات","مساعدات","تعليم","زواج","إيواء","أرامل","أدوية","مباني"],
   "الخدمة":     ["بركة","مرتبات","أغابي","خدمات","مكتبيات","رحلات","مباني"],
   "المواصلات":  ["بنزين","أتوبيس","حضانة","صيانة","تجديد"],
-  "المرافق":    ["كهرباء","مياه","نت","غاز"],
-  "أخري":       ["تليفون","مطرانية","تأمين","مجاملات","مؤتمرات","دفاتر","صندوق الطوارئ"]
+  "المرافق":    ["كهرباء","مياه","نت","غاز","جمعيات"],
+  "أخري":       ["تليفون","مطرانية","تأمين","مجاملات","مؤتمرات","دفاتر","صندوق الطوارئ","مشتريات","عديات"]
 };
+let CUSTOM_EXPENSE = {}; // { catName: [field1, field2, ...] }
 const PASSWORD = '191020';
 
 // ══════════════════════════════════════════════════════
@@ -526,26 +771,36 @@ try { allData = JSON.parse(localStorage.getItem('church_data') || '{}'); } catch
 function initFirebase() {
   if (!window._fbListen) return;
 
-  // Listen for real-time changes from Firestore
   window._fbListen((remoteData, fromCache) => {
     if (!remoteData || Object.keys(remoteData).length === 0) return;
 
-    // Merge: keep remote data but don't override unsaved local changes
-    const merged = { ...remoteData };
-    allData = merged;
+    // Always save remote data to allData + localStorage regardless of login state
+    allData = { ...remoteData };
     try { localStorage.setItem('church_data', JSON.stringify(allData)); } catch(e){}
 
-    // Refresh welcome screen if open
-    if (document.getElementById('welcome-screen').style.display !== 'none') {
+    // Don't update UI if not logged in
+    if (!currentUser) return;
+
+    // If login screen visible — do nothing
+    const loginVisible = document.getElementById('login-screen').style.display !== 'none';
+    if (loginVisible) return;
+
+    // If on welcome screen — refresh year list
+    const welcomeVisible = document.getElementById('welcome-screen').style.display !== 'none';
+    if (welcomeVisible) {
       renderWelcome();
+      return;
     }
-    // Refresh current year view if user is inside a year
+
+    // If inside a year — reload and refresh active tab
     if (curYear && allData[curYear]) {
-      const yd = allData[curYear];
-      budget     = yd.budget     || emptyBudget();
-      openingBal = yd.openingBal || 0;
-      parishes   = yd.parishes   || [];
-      if (document.getElementById('tab-parishes').classList.contains('active')) renderParishes();
+      loadYear(curYear);
+      const activeTab = document.querySelector('.tab-panel.active');
+      if (activeTab) {
+        if      (activeTab.id==='tab-parishes') renderParishes();
+        else if (activeTab.id==='tab-budget')   renderBudget();
+        else if (activeTab.id==='tab-annual')   renderAnnual();
+      }
     }
   });
 }
@@ -553,7 +808,7 @@ function initFirebase() {
 // Save to localStorage + Firebase (debounced 1.5s to avoid hammering)
 function save() {
   if (!curYear) return;
-  allData[curYear] = { budget, openingBal, parishes };
+  allData[curYear] = { budget, openingBal, parishes, customIncome: CUSTOM_INCOME, customExpense: CUSTOM_EXPENSE };
   try { localStorage.setItem('church_data', JSON.stringify(allData)); } catch(e){}
   // Debounce Firebase save
   clearTimeout(saveDebounce);
@@ -587,9 +842,14 @@ function emptyBudget() {
   MONTHS.forEach(m => {
     d[m] = { income:{}, expenses:{}, notes:[] };
     INCOME_FIELDS.forEach(f => d[m].income[f] = 0);
+    CUSTOM_INCOME.forEach(f => d[m].income[f] = d[m].income[f]||0);
     Object.entries(EXPENSE_CATS).forEach(([cat,fields]) => {
       d[m].expenses[cat] = {};
       fields.forEach(f => d[m].expenses[cat][f] = 0);
+    });
+    Object.entries(CUSTOM_EXPENSE).forEach(([cat,fields]) => {
+      if (!d[m].expenses[cat]) d[m].expenses[cat] = {};
+      fields.forEach(f => d[m].expenses[cat][f] = d[m].expenses[cat][f]||0);
     });
   });
   return d;
@@ -597,30 +857,45 @@ function emptyBudget() {
 
 function loadYear(year) {
   curYear = year;
-  if (allData[year]) {
-    budget     = allData[year].budget     || emptyBudget();
-    openingBal = allData[year].openingBal || 0;
-    parishes   = allData[year].parishes   || [];
+  const yd = allData[year];
+  if (yd) {
+    budget     = yd.budget     || emptyBudget();
+    openingBal = yd.openingBal || 0;
+    parishes   = yd.parishes   || [];
+    CUSTOM_INCOME  = yd.customIncome  || [];
+    CUSTOM_EXPENSE = yd.customExpense || {};
+    // Ensure all months and all fields exist
     MONTHS.forEach(m => {
-      if (!budget[m]) budget[m] = { income:{}, expenses:{}, notes:[] };
-      if (!budget[m].notes) budget[m].notes = [];
+      if (!budget[m] || typeof budget[m] !== 'object') budget[m] = { income:{}, expenses:{}, notes:[] };
+      if (!budget[m].income)   budget[m].income   = {};
+      if (!budget[m].expenses) budget[m].expenses = {};
+      if (!budget[m].notes)    budget[m].notes    = [];
       INCOME_FIELDS.forEach(f => { if (budget[m].income[f]===undefined) budget[m].income[f]=0; });
+      CUSTOM_INCOME.forEach(f => { if (budget[m].income[f]===undefined) budget[m].income[f]=0; });
       Object.entries(EXPENSE_CATS).forEach(([cat,fields]) => {
+        if (!budget[m].expenses[cat]) budget[m].expenses[cat]={};
+        fields.forEach(f => { if (budget[m].expenses[cat][f]===undefined) budget[m].expenses[cat][f]=0; });
+      });
+      Object.entries(CUSTOM_EXPENSE).forEach(([cat,fields]) => {
         if (!budget[m].expenses[cat]) budget[m].expenses[cat]={};
         fields.forEach(f => { if (budget[m].expenses[cat][f]===undefined) budget[m].expenses[cat][f]=0; });
       });
     });
   } else {
+    CUSTOM_INCOME=[]; CUSTOM_EXPENSE={};
     budget=emptyBudget(); openingBal=0; parishes=[];
-    allData[year]={budget,openingBal,parishes};
+    allData[year]={budget,openingBal,parishes,customIncome:[],customExpense:{}};
     try { localStorage.setItem('church_data',JSON.stringify(allData)); } catch(e){}
   }
   activeMonth="يناير"; activeP=null;
 }
 
-function totalIncome(m)  { return Object.values(budget[m].income).reduce((a,b)=>a+b,0); }
-function totalCat(m,cat) { return Object.values(budget[m].expenses[cat]).reduce((a,b)=>a+b,0); }
-function totalExp(m)     { return Object.keys(EXPENSE_CATS).reduce((s,c)=>s+totalCat(m,c),0); }
+function totalIncome(m)  { return Object.values(budget[m].income).reduce((a,b)=>a+b,0); } // includes custom
+function totalCat(m,cat) { return budget[m].expenses[cat] ? Object.values(budget[m].expenses[cat]).reduce((a,b)=>a+b,0) : 0; }
+function totalExp(m)     {
+  const allCats = {...EXPENSE_CATS, ...CUSTOM_EXPENSE};
+  return Object.keys(allCats).reduce((s,c)=> s + (budget[m].expenses[c] ? Object.values(budget[m].expenses[c]).reduce((a,b)=>a+b,0) : 0), 0);
+}
 function getCarry(m)     { const i=MONTHS.indexOf(m); return i===0?openingBal:getEnd(MONTHS[i-1]); }
 function getEnd(m)       { return getCarry(m)+totalIncome(m)-totalExp(m); }
 
@@ -628,22 +903,43 @@ function getEnd(m)       { return getCarry(m)+totalIncome(m)-totalExp(m); }
 // WELCOME
 // ══════════════════════════════════════════════════════
 function renderWelcome() {
-  const grid  = document.getElementById('year-grid');
-  const saved = Object.keys(allData).map(Number).sort();
-  const years = [...new Set([2026,...saved])].sort();
-  const maxY  = years[years.length-1];
+  const grid     = document.getElementById('year-grid');
+  const isViewer = currentUser && currentUser.role === 'viewer';
+  const saved    = Object.keys(allData).map(Number).sort();
+  const years    = [...new Set([2026,...saved])].sort();
+  const maxY     = years[years.length-1];
+
+  // Viewer: show only saved years, no new year button
   let html = years.map(y => {
     const has = !!allData[y];
-    return `<button class="year-btn ${has?'saved':''}" onclick="selectYear(${y})">${y}<br><span style="font-size:12px;font-weight:400">${has?'✅ محفوظة':'جديدة'}</span></button>`;
+    // Viewer: hide unsaved/new years
+    if (isViewer && !has) return '';
+    return `<button class="year-btn allow-viewer ${has?'saved':''}" onclick="selectYear(${y})">${y}<br>
+      <span style="font-size:12px;font-weight:400">${has?'✅ محفوظة':'جديدة'}</span>
+    </button>`;
   }).join('');
-  if (!years.includes(maxY+1))
+
+  // Only admins see the "new year" button
+  if (!isViewer && !years.includes(maxY+1))
     html += `<button class="new-year-btn" onclick="selectYear(${maxY+1})">➕ ${maxY+1}<br><span style="font-size:11px">سنة جديدة</span></button>`;
+
+  // Viewer hint
+  if (isViewer)
+    html += `<div style="width:100%;text-align:center;color:#7bc;font-size:13px;margin-top:6px">👁️ وضع العرض — اختر سنة للمشاهدة</div>`;
+
   grid.innerHTML = html;
 }
 
 function selectYear(year) {
+  const isViewer = currentUser && currentUser.role === 'viewer';
+  // Viewer cannot create/enter new unsaved years
+  if (isViewer && !allData[year]) {
+    showToast('❌ مش مسموح بإنشاء سنة جديدة', true);
+    return;
+  }
   loadYear(year);
   document.getElementById('welcome-screen').style.display='none';
+  setTimeout(applyRole, 80); // re-apply role after DOM updates
   document.getElementById('header-year').textContent=year;
   document.getElementById('annual-year-lbl').textContent=year;
   document.getElementById('next-year-lbl').textContent=year+1;
@@ -662,9 +958,11 @@ function goWelcome() {
   save();
   renderWelcome();
   document.getElementById('welcome-screen').style.display='flex';
+  applyRole();
 }
 
 function openNextYear() {
+  if (currentUser && currentUser.role === 'viewer') { showToast('❌ مش مسموح', true); return; }
   save();
   const nextY=curYear+1, carry=getEnd(MONTHS[11]);
   loadYear(nextY);
@@ -705,18 +1003,65 @@ function removeParish(id) {
 function toggleParish(id){ activeP=activeP===id?null:id; renderParishes(); }
 function addFamily(pid) {
   const n=document.getElementById('fn-'+pid).value.trim();
-  const c=parseInt(document.getElementById('fc-'+pid).value);
-  if(!n||!c||c<1)return;
-  parishes=parishes.map(p=>p.id===pid?{...p,families:[...p.families,{id:Date.now(),name:n,count:c}]}:p);
+  if(!n)return;
+  parishes=parishes.map(p=>p.id===pid?{...p,families:[...p.families,{id:Date.now(),name:n,husband:'',wife:'',children:[],showChildren:false}]}:p);
   document.getElementById('fn-'+pid).value='';
-  document.getElementById('fc-'+pid).value='';
   renderParishes(); save();
 }
 function removeFamily(pid,fid) {
   parishes=parishes.map(p=>p.id===pid?{...p,families:p.families.filter(f=>f.id!==fid)}:p);
   renderParishes(); save();
 }
-function pTot(p){ return{fam:p.families.length,mem:p.families.reduce((s,f)=>s+f.count,0)}; }
+function updateSpouse(pid,fid,field,val){
+  parishes=parishes.map(p=>p.id===pid?{...p,families:p.families.map(f=>f.id===fid?{...f,[field]:val}:f)}:p);
+  // update totals
+  const allM=parishes.reduce((s,p)=>s+pTot(p).mem,0);
+  document.getElementById('total-members').textContent=allM;
+  // update name row subtitle live
+  const fam = parishes.find(p=>p.id===pid)?.families.find(f=>f.id===fid);
+  if(fam){
+    const el=document.getElementById('spouse-sub-'+fid);
+    if(el){
+      const h=fam.husband||'', w=fam.wife||'';
+      el.textContent=(h?'👨 '+h:'')+(h&&w?' · ':'')+(w?'👩 '+w:'');
+    }
+  }
+  save();
+}
+function toggleChildren(pid,fid){
+  parishes=parishes.map(p=>p.id===pid?{...p,families:p.families.map(f=>f.id===fid?{...f,showChildren:!f.showChildren}:f)}:p);
+  renderParishes();
+}
+function addChild(pid,fid){
+  const nameInp=document.getElementById('cn-'+fid);
+  const cname=nameInp.value.trim();
+  if(!cname)return;
+  parishes=parishes.map(p=>p.id===pid?{...p,families:p.families.map(f=>{
+    if(f.id!==fid)return f;
+    const children=[...(f.children||[]),{id:Date.now(),name:cname}];
+    return {...f,children,count:children.length};
+  })}:p);
+  nameInp.value='';
+  renderParishes(); save();
+}
+function removeChild(pid,fid,cid){
+  parishes=parishes.map(p=>p.id===pid?{...p,families:p.families.map(f=>{
+    if(f.id!==fid)return f;
+    const children=(f.children||[]).filter(c=>c.id!==cid);
+    return {...f,children,count:children.length};
+  })}:p);
+  renderParishes(); save();
+}
+function pTot(p){
+  return {
+    fam: p.families.length,
+    mem: p.families.reduce((s,f)=>{
+      const kids = (f.children||[]).length;
+      const adults = (f.husband?1:0) + (f.wife?1:0);
+      return s + kids + adults;
+    }, 0)
+  };
+}
 
 function renderParishes() {
   const allF=parishes.reduce((s,p)=>s+p.families.length,0);
@@ -726,24 +1071,102 @@ function renderParishes() {
   document.getElementById('total-members').textContent=allM;
   const cont=document.getElementById('parishes-list');
   if(!parishes.length){ cont.innerHTML='<div class="empty-state"><div class="empty-icon">🏛</div>لم يتم إضافة شعب بعد</div>'; return; }
+
   cont.innerHTML=parishes.map(p=>{
-    const t=pTot(p),open=activeP===p.id;
-    const famTable=p.families.length===0
-      ?'<div style="text-align:center;color:#567;padding:14px;font-size:14px">لم تتم إضافة أسر بعد</div>'
-      :`<table class="data-table" style="margin-top:10px">
-          <thead><tr><th style="width:36px">#</th><th>اسم الأسرة</th><th style="text-align:center">عدد الأفراد</th><th style="text-align:center">حذف</th></tr></thead>
-          <tbody>
-            ${p.families.map((f,i)=>`<tr>
+    const t=pTot(p), open=activeP===p.id;
+
+    const famRows = p.families.length===0
+      ? '<div style="text-align:center;color:#567;padding:14px;font-size:14px">لم تتم إضافة أسر بعد</div>'
+      : p.families.map((f,i)=>{
+          const children = f.children||[];
+          const childCount = children.length;
+          const showC = f.showChildren;
+          const husband = f.husband||'';
+          const wife    = f.wife||'';
+          const totalMembers = (husband?1:0)+(wife?1:0)+childCount;
+
+          const detailSection = showC ? `
+            <tr>
+              <td colspan="4" style="padding:0;background:rgba(0,0,0,0.18);">
+                <div style="padding:14px 18px;">
+
+                  <!-- Husband & Wife -->
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+                    <div style="background:rgba(40,100,180,0.08);border:1px solid rgba(40,100,180,0.25);border-radius:8px;padding:10px;">
+                      <div style="color:#7bc;font-size:12px;font-weight:700;margin-bottom:6px">👨 الزوج</div>
+                      <input type="text" value="${husband}"
+                        oninput="updateSpouse(${p.id},${f.id},'husband',this.value)"
+                        placeholder="اسم الزوج..."
+                        style="width:100%;padding:6px 10px;border-radius:6px;border:1px solid #3a5a8c;background:#0f1e30;color:#e8d5b7;font-size:13px;font-family:inherit;outline:none">
+                    </div>
+                    <div style="background:rgba(200,80,180,0.08);border:1px solid rgba(200,80,180,0.25);border-radius:8px;padding:10px;">
+                      <div style="color:#d8a;font-size:12px;font-weight:700;margin-bottom:6px">👩 الزوجة</div>
+                      <input type="text" value="${wife}"
+                        oninput="updateSpouse(${p.id},${f.id},'wife',this.value)"
+                        placeholder="اسم الزوجة..."
+                        style="width:100%;padding:6px 10px;border-radius:6px;border:1px solid #5a3a5c;background:#0f1e30;color:#e8d5b7;font-size:13px;font-family:inherit;outline:none">
+                    </div>
+                  </div>
+
+                  <!-- Children -->
+                  <div style="color:#c9920a;font-size:12px;font-weight:700;margin-bottom:8px">👶 الأولاد (${childCount})</div>
+                  ${children.length===0
+                    ? '<div style="color:#567;font-size:13px;padding:4px 0;margin-bottom:8px">لم يتم إضافة أولاد بعد</div>'
+                    : children.map((c,ci)=>`
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+                          <span style="color:#e8d5b7;font-size:13px">${ci+1}. ${c.name}</span>
+                          <button class="btn-del" onclick="removeChild(${p.id},${f.id},${c.id})" style="padding:2px 8px;font-size:11px">✕</button>
+                        </div>`).join('')
+                  }
+                  <div style="display:flex;gap:8px;margin-top:10px;">
+                    <input id="cn-${f.id}" type="text" placeholder="اسم الولد..."
+                      onkeydown="if(event.key==='Enter')addChild(${p.id},${f.id})"
+                      style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid #3a5a8c;background:#0f1e30;color:#e8d5b7;font-size:13px;font-family:inherit;outline:none">
+                    <button onclick="addChild(${p.id},${f.id})"
+                      style="padding:6px 14px;border-radius:6px;border:none;background:linear-gradient(135deg,#c9920a,#8b6914);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">+ إضافة</button>
+                  </div>
+
+                </div>
+              </td>
+            </tr>` : '';
+
+          return `
+            <tr style="cursor:default">
               <td style="color:#567">${i+1}</td>
-              <td style="color:#e8d5b7;font-weight:500">${f.name}</td>
-              <td style="text-align:center"><span class="badge-blue">${f.count}</span></td>
-              <td style="text-align:center"><button class="btn-del" onclick="removeFamily(${p.id},${f.id})">حذف</button></td>
-            </tr>`).join('')}
-            <tr class="total-tr"><td colspan="2">الإجمالي</td><td style="text-align:center"><span class="badge-gold">${t.mem}</span></td><td></td></tr>
-          </tbody>
-        </table>`;
+              <td>
+                <div style="color:#e8d5b7;font-weight:600">${f.name}</div>
+                <div id="spouse-sub-${f.id}" style="font-size:11px;color:#8ab;margin-top:2px">${husband?'👨 '+husband:''}${husband&&wife?' · ':''}${wife?'👩 '+wife:''}</div>
+              </td>
+              <td style="text-align:center">
+                <button onclick="toggleChildren(${p.id},${f.id})" class="allow-viewer"
+                  style="background:${totalMembers>0?'rgba(201,146,10,0.15)':'rgba(40,100,180,0.1)'};border:1px solid ${totalMembers>0?'rgba(201,146,10,0.4)':'rgba(40,100,180,0.25)'};color:${totalMembers>0?'#f5d78e':'#7bc'};border-radius:20px;padding:3px 14px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit">
+                  👥 ${totalMembers} ${showC?'▲':'▼'}
+                </button>
+              </td>
+              <td style="text-align:center">
+                <button class="btn-del" onclick="removeFamily(${p.id},${f.id})">حذف</button>
+              </td>
+            </tr>
+            ${detailSection}`;
+        }).join('') +
+        `<tr class="total-tr">
+          <td colspan="2">الإجمالي</td>
+          <td style="text-align:center"><span class="badge-gold">${t.mem} فرد</span></td>
+          <td></td>
+        </tr>`;
+
+    const famTable = `<table class="data-table" style="margin-top:12px">
+      <thead><tr>
+        <th style="width:36px">#</th>
+        <th>اسم الأسرة</th>
+        <th style="text-align:center">الأفراد</th>
+        <th style="text-align:center">حذف</th>
+      </tr></thead>
+      <tbody>${famRows}</tbody>
+    </table>`;
+
     return `<div class="parish-card ${open?'open':''}">
-      <div class="parish-header" onclick="toggleParish(${p.id})">
+      <div class="parish-header allow-viewer" onclick="toggleParish(${p.id})">
         <div class="parish-title">
           <span style="font-size:24px">🏛</span>
           <div><h4>${p.name}</h4><p>${t.fam} أسرة · ${t.mem} فرد</p></div>
@@ -758,7 +1181,6 @@ function renderParishes() {
       <div class="parish-body ${open?'open':''}">
         <div class="form-row" style="margin-top:14px">
           <input id="fn-${p.id}" type="text" placeholder="اسم الأسرة..." style="flex:2;min-width:110px" onkeydown="if(event.key==='Enter')addFamily(${p.id})">
-          <input id="fc-${p.id}" type="number" placeholder="عدد الأفراد" min="1" style="width:120px">
           <button class="btn btn-green" onclick="addFamily(${p.id})">+ إضافة أسرة</button>
         </div>
         ${famTable}
@@ -800,24 +1222,62 @@ function setOB(v){ openingBal=parseFloat(v)||0; refreshBal(); }
 // BUDGET
 // ══════════════════════════════════════════════════════
 function renderBudget(){
+  // Guard: ensure budget and activeMonth data exist
+  if (!budget || !budget[activeMonth]) {
+    if (!budget) budget = emptyBudget();
+    if (!budget[activeMonth]) budget[activeMonth] = { income:{}, expenses:{}, notes:[] };
+    INCOME_FIELDS.forEach(f => { if (budget[activeMonth].income[f]===undefined) budget[activeMonth].income[f]=0; });
+    Object.entries(EXPENSE_CATS).forEach(([cat,fields]) => {
+      if (!budget[activeMonth].expenses[cat]) budget[activeMonth].expenses[cat]={};
+      fields.forEach(f => { if (budget[activeMonth].expenses[cat][f]===undefined) budget[activeMonth].expenses[cat][f]=0; });
+    });
+  }
   document.getElementById('month-pills').innerHTML=MONTHS.map(m=>
-    `<button class="month-pill ${m===activeMonth?'active':''}" onclick="pickMonth('${m}')">${m}</button>`).join('');
+    `<button class="month-pill allow-viewer ${m===activeMonth?'active':''}" onclick="pickMonth('${m}')">${m}</button>`).join('');
   document.getElementById('income-title').textContent=`💰 الإيرادات - ${activeMonth}`;
   document.getElementById('expense-title').textContent=`📊 المصروفات - ${activeMonth}`;
   const lbl=document.getElementById('export-month-lbl');
   if(lbl)lbl.textContent=activeMonth;
 
-  document.getElementById('income-fields').innerHTML=
-    INCOME_FIELDS.map(f=>`<div class="input-row"><label>${f}</label>
-      <input type="number" min="0" value="${budget[activeMonth].income[f]}" oninput="setInc('${f}',this.value)"></div>`).join('')+
-    `<div class="total-row"><span style="color:#6dcc88;font-weight:700">إجمالي الإيرادات</span>
+  // Income fields (fixed + custom)
+  const allIncFields = [...INCOME_FIELDS, ...CUSTOM_INCOME];
+  let incHtml = allIncFields.map(f=>{
+    const isCustom = CUSTOM_INCOME.includes(f);
+    return `<div class="input-row">
+      <label style="display:flex;align-items:center;gap:6px">
+        ${f}
+        ${isCustom ? `<button onclick="removeCustomIncome('${f}')" title="حذف" style="background:rgba(200,50,50,0.15);border:1px solid rgba(200,50,50,0.3);color:#f77;border-radius:4px;padding:1px 7px;cursor:pointer;font-size:11px;line-height:1.4">✕</button>` : ''}
+      </label>
+      <input type="number" min="0" value="${budget[activeMonth].income[f]||0}" oninput="setInc('${f}',this.value)">
+    </div>`;
+  }).join('');
+  incHtml += `<div class="total-row"><span style="color:#6dcc88;font-weight:700">إجمالي الإيرادات</span>
      <span style="color:#6dcc88;font-weight:900;font-size:17px" id="inc-total">0</span></div>`;
+  document.getElementById('income-fields').innerHTML=incHtml;
 
+  // Expense fields (fixed cats + custom cats)
+  const allExpCats = {...EXPENSE_CATS, ...CUSTOM_EXPENSE};
   let expHtml='';
-  Object.entries(EXPENSE_CATS).forEach(([cat,fields])=>{
-    expHtml+=`<div class="cat-header">${cat}</div>`;
-    fields.forEach(f=>{ expHtml+=`<div class="input-row input-row-red"><label>${f}</label>
-      <input type="number" min="0" value="${budget[activeMonth].expenses[cat][f]}" oninput="setExp('${cat}','${f}',this.value)"></div>`; });
+  Object.entries(allExpCats).forEach(([cat,fields])=>{
+    const isCustomCat = !!CUSTOM_EXPENSE[cat];
+    expHtml+=`<div class="cat-header" style="display:flex;align-items:center;justify-content:space-between">
+      <span>${cat}${isCustomCat ? ' <span style="font-size:10px;color:#c9920a;background:rgba(201,146,10,0.1);padding:1px 6px;border-radius:4px">مخصص</span>' : ''}</span>
+      <div style="display:flex;gap:6px">
+        <button onclick="addCustomExpenseField('${cat}')" style="padding:2px 10px;border-radius:5px;border:1px solid rgba(220,100,100,0.4);background:rgba(180,40,80,0.1);color:#e07090;cursor:pointer;font-size:11px;font-family:inherit">+ خانة</button>
+        ${isCustomCat ? `<button onclick="removeCustomCat('${cat}')" style="padding:2px 8px;border-radius:5px;border:1px solid rgba(200,50,50,0.3);background:rgba(200,50,50,0.08);color:#f77;cursor:pointer;font-size:11px;font-family:inherit">✕ حذف القسم</button>` : ''}
+      </div>
+    </div>`;
+    if (!budget[activeMonth].expenses[cat]) budget[activeMonth].expenses[cat]={};
+    fields.forEach(f=>{
+      const isCustomF = isCustomCat || (CUSTOM_EXPENSE[cat]||[]).includes(f);
+      expHtml+=`<div class="input-row input-row-red">
+        <label style="display:flex;align-items:center;gap:6px">
+          ${f}
+          ${isCustomF ? `<button onclick="removeCustomExpField('${cat}','${f}')" title="حذف" style="background:rgba(200,50,50,0.15);border:1px solid rgba(200,50,50,0.3);color:#f77;border-radius:4px;padding:1px 7px;cursor:pointer;font-size:11px;line-height:1.4">✕</button>` : ''}
+        </label>
+        <input type="number" min="0" value="${budget[activeMonth].expenses[cat][f]||0}" oninput="setExp('${cat}','${f}',this.value)">
+      </div>`;
+    });
     expHtml+=`<div class="subtotal"><span>مجموع ${cat}</span><span id="cat-${cat.replace(/\s/g,'_')}">${totalCat(activeMonth,cat).toLocaleString()}</span></div>`;
   });
   expHtml+=`<div class="total-row total-row-red"><span style="color:#e07090;font-weight:700">إجمالي المصروفات</span>
@@ -825,6 +1285,7 @@ function renderBudget(){
   document.getElementById('expense-fields').innerHTML=expHtml;
 
   refreshBal(); renderNotes();
+  if(currentUser) setTimeout(applyRole,0);
 }
 
 function setInc(f,v){ budget[activeMonth].income[f]=parseFloat(v)||0; refreshBal(); save(); }
@@ -848,7 +1309,8 @@ function refreshBal(){
   const it=document.getElementById('inc-total'),et=document.getElementById('exp-total');
   if(it)it.textContent=inc.toLocaleString();
   if(et)et.textContent=exp.toLocaleString();
-  Object.keys(EXPENSE_CATS).forEach(cat=>{
+  const _allCats = {...EXPENSE_CATS, ...CUSTOM_EXPENSE};
+  Object.keys(_allCats).forEach(cat=>{
     const el=document.getElementById('cat-'+cat.replace(/\s/g,'_'));
     if(el)el.textContent=totalCat(activeMonth,cat).toLocaleString();
   });
@@ -892,7 +1354,7 @@ function renderAnnual(){
   const rows=MONTHS.map(m=>{
     const carry=getCarry(m),inc=totalIncome(m),exp=totalExp(m),end=carry+inc-exp;
     tInc+=inc; tExp+=exp;
-    return `<tr onclick="jumpMonth('${m}')">
+    return `<tr onclick="jumpMonth('${m}')" style="cursor:pointer">
       <td style="color:#e8d5b7;font-weight:600">${m}</td>
       <td style="color:#f5d78e;font-weight:600">${carry.toLocaleString()}</td>
       <td style="color:#6dcc88;font-weight:600">${inc.toLocaleString()}</td>
@@ -912,7 +1374,7 @@ function renderAnnual(){
     </tr></tbody>`;
 }
 
-function jumpMonth(m){
+function jumpMonth(m){ // allow-viewer
   activeMonth=m;
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -985,9 +1447,344 @@ function showPrintInstructions(){
   el.style.display=el.style.display==='none'?'block':'none';
 }
 
+
+/* ══════════════════════════════════════════════════════
+   CUSTOM FIELDS
+══════════════════════════════════════════════════════ */
+function removeCustomIncome(f){
+  if (!confirm(`هتحذف خانة "${f}" من كل الشهور. متأكد؟`)) return;
+  CUSTOM_INCOME = CUSTOM_INCOME.filter(x=>x!==f);
+  MONTHS.forEach(m => { if (budget[m]) delete budget[m].income[f]; });
+  renderBudget(); save();
+  showToast(`🗑️ تم حذف "${f}"`);
+}
+
+function addCustomExpenseField(cat){
+  const name = prompt(`اسم الخانة الجديدة تحت "${cat}":`);
+  if (!name || !name.trim()) return;
+  const f = name.trim();
+  const existing = [...(EXPENSE_CATS[cat]||[]), ...(CUSTOM_EXPENSE[cat]||[])];
+  if (existing.includes(f)) { showToast('❌ الخانة موجودة بالفعل!', true); return; }
+  if (!CUSTOM_EXPENSE[cat]) CUSTOM_EXPENSE[cat] = [];
+  CUSTOM_EXPENSE[cat].push(f);
+  MONTHS.forEach(m => { if (budget[m] && budget[m].expenses[cat]) budget[m].expenses[cat][f] = 0; });
+  renderBudget(); save();
+  showToast(`✅ تمت إضافة "${f}" تحت ${cat}`);
+}
+
+function removeCustomExpField(cat, f){
+  if (!confirm(`هتحذف خانة "${f}". متأكد؟`)) return;
+  if (CUSTOM_EXPENSE[cat]) CUSTOM_EXPENSE[cat] = CUSTOM_EXPENSE[cat].filter(x=>x!==f);
+  MONTHS.forEach(m => { if (budget[m] && budget[m].expenses[cat]) delete budget[m].expenses[cat][f]; });
+  renderBudget(); save();
+  showToast(`🗑️ تم حذف "${f}"`);
+}
+
+
+function removeCustomCat(cat){
+  if (!confirm(`هتحذف قسم "${cat}" وكل خاناته. متأكد؟`)) return;
+  delete CUSTOM_EXPENSE[cat];
+  MONTHS.forEach(m => { if (budget[m] && budget[m].expenses[cat]) delete budget[m].expenses[cat]; });
+  renderBudget(); save();
+  showToast(`🗑️ تم حذف قسم "${cat}"`);
+}
+
 // ══════════════════════════════════════════════════════
 // TOAST
 // ══════════════════════════════════════════════════════
+
+/* ══════════════════════════════════════════════════════
+   CUSTOM FIELDS
+══════════════════════════════════════════════════════ */
+function addCustomIncome(){
+  const name = prompt('اسم خانة الإيراد الجديدة:');
+  if (!name || !name.trim()) return;
+  const f = name.trim();
+  if (INCOME_FIELDS.includes(f) || CUSTOM_INCOME.includes(f)) { showToast('❌ الخانة موجودة بالفعل!', true); return; }
+  CUSTOM_INCOME.push(f);
+  // Add to all months
+  MONTHS.forEach(m => { if (budget[m]) budget[m].income[f] = 0; });
+  renderBudget(); save();
+  showToast(`✅ تمت إضافة "${f}" للإيرادات`);
+}
+
+function removeCustomIncome(f){
+  if (!confirm(`هتحذف خانة "${f}" من كل الشهور. متأكد؟`)) return;
+  CUSTOM_INCOME = CUSTOM_INCOME.filter(x=>x!==f);
+  MONTHS.forEach(m => { if (budget[m]) delete budget[m].income[f]; });
+  renderBudget(); save();
+  showToast(`🗑️ تم حذف "${f}"`);
+}
+
+function addCustomExpenseField(cat){
+  const name = prompt(`اسم الخانة الجديدة تحت "${cat}":`);
+  if (!name || !name.trim()) return;
+  const f = name.trim();
+  const existing = [...(EXPENSE_CATS[cat]||[]), ...(CUSTOM_EXPENSE[cat]||[])];
+  if (existing.includes(f)) { showToast('❌ الخانة موجودة بالفعل!', true); return; }
+  if (!CUSTOM_EXPENSE[cat]) CUSTOM_EXPENSE[cat] = [];
+  CUSTOM_EXPENSE[cat].push(f);
+  MONTHS.forEach(m => { if (budget[m] && budget[m].expenses[cat]) budget[m].expenses[cat][f] = 0; });
+  renderBudget(); save();
+  showToast(`✅ تمت إضافة "${f}" تحت ${cat}`);
+}
+
+function removeCustomExpField(cat, f){
+  if (!confirm(`هتحذف خانة "${f}". متأكد؟`)) return;
+  if (CUSTOM_EXPENSE[cat]) CUSTOM_EXPENSE[cat] = CUSTOM_EXPENSE[cat].filter(x=>x!==f);
+  MONTHS.forEach(m => { if (budget[m] && budget[m].expenses[cat]) delete budget[m].expenses[cat][f]; });
+  renderBudget(); save();
+  showToast(`🗑️ تم حذف "${f}"`);
+}
+
+function addCustomExpenseCat(){
+  const cat = prompt('اسم القسم الجديد:');
+  if (!cat || !cat.trim()) return;
+  const c = cat.trim();
+  if (EXPENSE_CATS[c] || CUSTOM_EXPENSE[c]) { showToast('❌ القسم موجود بالفعل!', true); return; }
+  CUSTOM_EXPENSE[c] = [];
+  MONTHS.forEach(m => { if (budget[m]) budget[m].expenses[c] = {}; });
+  renderBudget(); save();
+  showToast(`✅ تمت إضافة قسم "${c}"`);
+}
+
+function removeCustomCat(cat){
+  if (!confirm(`هتحذف قسم "${cat}" وكل خاناته. متأكد؟`)) return;
+  delete CUSTOM_EXPENSE[cat];
+  MONTHS.forEach(m => { if (budget[m] && budget[m].expenses[cat]) delete budget[m].expenses[cat]; });
+  renderBudget(); save();
+  showToast(`🗑️ تم حذف قسم "${cat}"`);
+}
+
+
+/* ══════════════════════════════════════════════════════
+   PRINT REPORTS
+══════════════════════════════════════════════════════ */
+function printParishesReport() {
+  const allF = parishes.reduce((s,p)=>s+p.families.length,0);
+  const allM = parishes.reduce((s,p)=>s+pTot(p).mem,0);
+
+  let parishRows = parishes.map(p => {
+    const t = pTot(p);
+    const famRows = p.families.map((f,i) => {
+      const children = f.children||[];
+      const husband  = f.husband||'—';
+      const wife     = f.wife||'—';
+      const childList = children.length ? children.map(c=>c.name).join('، ') : '—';
+      const total = (f.husband?1:0)+(f.wife?1:0)+children.length;
+      return `<tr>
+        <td>${i+1}</td>
+        <td><strong>${f.name}</strong></td>
+        <td>${husband}</td>
+        <td>${wife}</td>
+        <td>${childList}</td>
+        <td style="text-align:center"><strong>${total}</strong></td>
+      </tr>`;
+    }).join('');
+    return `
+      <div class="section">
+        <div class="section-title">🏛 ${p.name} &nbsp;—&nbsp; ${t.fam} أسرة · ${t.mem} فرد</div>
+        <table>
+          <thead><tr>
+            <th style="width:30px">#</th>
+            <th>الأسرة</th>
+            <th>الزوج</th>
+            <th>الزوجة</th>
+            <th>الأولاد</th>
+            <th style="text-align:center">الإجمالي</th>
+          </tr></thead>
+          <tbody>${famRows || '<tr><td colspan="6" style="text-align:center;color:#999">لا يوجد أسر</td></tr>'}</tbody>
+        </table>
+      </div>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تقرير الشعب — ${curYear}</title>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',Tahoma,sans-serif; color:#111; padding:30px; font-size:13px; }
+  h1 { text-align:center; font-size:22px; margin-bottom:4px; color:#1a3a5c; }
+  .meta { text-align:center; color:#666; font-size:13px; margin-bottom:24px; }
+  .summary { display:flex; justify-content:center; gap:30px; margin-bottom:24px; background:#f5f0e8; border:1px solid #c9920a; border-radius:10px; padding:14px; }
+  .sum-item { text-align:center; }
+  .sum-num { font-size:28px; font-weight:900; color:#8b4a00; }
+  .sum-lbl { font-size:12px; color:#666; }
+  .section { margin-bottom:28px; }
+  .section-title { background:#1a3a5c; color:#fff; padding:9px 16px; border-radius:6px 6px 0 0; font-weight:700; font-size:14px; }
+  table { width:100%; border-collapse:collapse; border:1px solid #ddd; }
+  th { background:#f0f4f8; padding:8px 12px; text-align:right; font-size:12px; border-bottom:2px solid #1a3a5c; }
+  td { padding:7px 12px; border-bottom:1px solid #eee; font-size:13px; }
+  tr:nth-child(even) td { background:#fafafa; }
+  .footer { text-align:center; margin-top:30px; color:#999; font-size:12px; border-top:1px solid #eee; padding-top:14px; }
+  @media print {
+    body { padding:15px; }
+    button { display:none; }
+  }
+</style>
+</head>
+<body>
+  <h1>✝ تقرير الشعب — ${curYear}</h1>
+  <div class="meta">تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')}</div>
+  <div class="summary">
+    <div class="sum-item"><div class="sum-num">${parishes.length}</div><div class="sum-lbl">شعبة</div></div>
+    <div class="sum-item"><div class="sum-num">${allF}</div><div class="sum-lbl">أسرة</div></div>
+    <div class="sum-item"><div class="sum-num">${allM}</div><div class="sum-lbl">فرد</div></div>
+  </div>
+  ${parishRows || '<p style="text-align:center;color:#999">لا يوجد بيانات</p>'}
+  <div class="footer">نظام إدارة الكنيسة · ${curYear}</div>
+  <br>
+  <div style="text-align:center"><button onclick="window.print()" style="padding:10px 30px;background:#1a3a5c;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">🖨️ طباعة</button></div>
+</body>
+</html>`;
+
+  const w = window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
+}
+
+function printBudgetReport() {
+  const m = activeMonth;
+  const carry = getCarry(m);
+  const inc   = totalIncome(m);
+  const exp   = totalExp(m);
+  const end   = carry + inc - exp;
+
+  // Income rows
+  const allIncFields = [...INCOME_FIELDS, ...CUSTOM_INCOME];
+  const incRows = allIncFields.map(f => {
+    const v = budget[m].income[f]||0;
+    if (!v) return '';
+    return `<tr><td>${f}</td><td style="text-align:left;font-weight:700;color:#1a6a2a">${v.toLocaleString()} جنيه</td></tr>`;
+  }).join('');
+
+  // Expense rows by category
+  let expRows = '';
+  // Merge fixed + custom fields per category
+  const fixedCats = Object.keys(EXPENSE_CATS);
+  const customCats = Object.keys(CUSTOM_EXPENSE);
+  const allCatNames = [...new Set([...fixedCats, ...customCats])];
+
+  allCatNames.forEach(cat => {
+    const fixedFields  = EXPENSE_CATS[cat]   || [];
+    const customFields = CUSTOM_EXPENSE[cat] || [];
+    const allFields    = [...fixedFields, ...customFields];
+    const catTotal     = totalCat(m, cat);
+    if (!catTotal) return;
+    expRows += `<tr><td colspan="2" style="background:#f5f0f0;font-weight:700;color:#6a1a2a;padding:6px 12px">${cat} — ${catTotal.toLocaleString()} جنيه</td></tr>`;
+    allFields.forEach(f => {
+      const v = budget[m].expenses[cat]?.[f] || 0;
+      if (!v) return;
+      expRows += `<tr><td style="padding-right:24px">· ${f}</td><td style="text-align:left;color:#8a1a2a">${v.toLocaleString()} جنيه</td></tr>`;
+    });
+  });
+
+  // Notes rows
+  const notes = budget[m].notes||[];
+  const notesRows = notes.map((n,i)=>`<tr>
+    <td>${i+1}. ${n.text}${n.purpose?' — '+n.purpose:''}</td>
+    <td style="text-align:left;font-weight:700">${n.amount?n.amount.toLocaleString()+' جنيه':''}</td>
+  </tr>`).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تقرير ميزانية ${m} ${curYear}</title>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Segoe UI',Tahoma,sans-serif; color:#111; padding:30px; font-size:13px; }
+  h1 { text-align:center; font-size:22px; margin-bottom:4px; color:#1a3a5c; }
+  .meta { text-align:center; color:#666; font-size:13px; margin-bottom:20px; }
+  .balances { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; margin-bottom:24px; }
+  .bal-card { text-align:center; border-radius:8px; padding:12px; border:1px solid #ddd; }
+  .bal-card .num { font-size:20px; font-weight:900; }
+  .bal-card .lbl { font-size:11px; color:#666; margin-top:3px; }
+  .section-title { background:#1a3a5c; color:#fff; padding:9px 16px; border-radius:6px 6px 0 0; font-weight:700; font-size:14px; margin-top:20px; }
+  table { width:100%; border-collapse:collapse; border:1px solid #ddd; }
+  th { background:#f0f4f8; padding:8px 12px; text-align:right; font-size:12px; border-bottom:2px solid #1a3a5c; }
+  td { padding:7px 12px; border-bottom:1px solid #eee; font-size:13px; }
+  tr:nth-child(even) td { background:#fafafa; }
+  .total-row td { background:#f5f0e8!important; font-weight:900; font-size:14px; border-top:2px solid #c9920a; }
+  .footer { text-align:center; margin-top:30px; color:#999; font-size:12px; border-top:1px solid #eee; padding-top:14px; }
+  @media print { button { display:none; } body { padding:15px; } }
+</style>
+</head>
+<body>
+  <h1>✝ تقرير ميزانية ${m} — ${curYear}</h1>
+  <div class="meta">تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')}</div>
+
+  <div class="balances">
+    <div class="bal-card" style="background:#f0f8f0;border-color:#2a7a3a">
+      <div class="num" style="color:#1a6a2a">${carry.toLocaleString()}</div>
+      <div class="lbl">رصيد أول الشهر</div>
+    </div>
+    <div class="bal-card" style="background:#f0f8f0;border-color:#2a7a3a">
+      <div class="num" style="color:#1a6a2a">${inc.toLocaleString()}</div>
+      <div class="lbl">إجمالي الإيرادات</div>
+    </div>
+    <div class="bal-card" style="background:#f8f0f0;border-color:#7a2a3a">
+      <div class="num" style="color:#6a1a2a">${exp.toLocaleString()}</div>
+      <div class="lbl">إجمالي المصروفات</div>
+    </div>
+    <div class="bal-card" style="background:${end>=0?'#f0f8f0':'#f8f0f0'};border-color:${end>=0?'#2a7a3a':'#7a2a3a'}">
+      <div class="num" style="color:${end>=0?'#1a6a2a':'#6a1a2a'}">${end.toLocaleString()}</div>
+      <div class="lbl">رصيد آخر الشهر</div>
+    </div>
+  </div>
+
+  <div class="section-title">💰 الإيرادات</div>
+  <table>
+    <thead><tr><th>البند</th><th style="text-align:left">المبلغ</th></tr></thead>
+    <tbody>
+      ${incRows || '<tr><td colspan="2" style="text-align:center;color:#999">لا يوجد إيرادات</td></tr>'}
+      <tr class="total-row"><td>إجمالي الإيرادات</td><td style="text-align:left;color:#1a6a2a">${inc.toLocaleString()} جنيه</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">📊 المصروفات</div>
+  <table>
+    <thead><tr><th>البند</th><th style="text-align:left">المبلغ</th></tr></thead>
+    <tbody>
+      ${expRows || '<tr><td colspan="2" style="text-align:center;color:#999">لا يوجد مصروفات</td></tr>'}
+      <tr class="total-row"><td>إجمالي المصروفات</td><td style="text-align:left;color:#6a1a2a">${exp.toLocaleString()} جنيه</td></tr>
+    </tbody>
+  </table>
+
+  ${notes.length ? `
+  <div class="section-title">📝 سجل الصرف التفصيلي</div>
+  <table>
+    <thead><tr><th>البيان</th><th style="text-align:left">المبلغ</th></tr></thead>
+    <tbody>${notesRows}</tbody>
+  </table>` : ''}
+
+  <div class="footer">نظام إدارة الكنيسة · ${curYear}</div>
+  <br>
+  <div style="text-align:center"><button onclick="window.print()" style="padding:10px 30px;background:#1a3a5c;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">🖨️ طباعة</button></div>
+</body>
+</html>`;
+
+  const w = window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
+}
+
+
+function resetExpenses() {
+  if (!confirm(`هتمسح كل مصروفات شهر ${activeMonth} وتبدأ من صفر. متأكد؟`)) return;
+  const allCats = {...EXPENSE_CATS, ...CUSTOM_EXPENSE};
+  Object.entries(allCats).forEach(([cat, fields]) => {
+    if (!budget[activeMonth].expenses[cat]) budget[activeMonth].expenses[cat] = {};
+    fields.forEach(f => budget[activeMonth].expenses[cat][f] = 0);
+  });
+  renderBudget();
+  save();
+  showToast(`🗑️ تم مسح مصروفات ${activeMonth}`);
+}
+
+
 function showToast(msg,isError=false){
   const t=document.getElementById('toast');
   t.textContent=msg;
@@ -1001,7 +1798,10 @@ function showToast(msg,isError=false){
 // ══════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════
-renderWelcome();
+// Show login screen on start, not welcome
+document.getElementById('welcome-screen').style.display = 'none';
+// focus username on load
+setTimeout(()=>{ const u=document.getElementById('login-username'); if(u)u.focus(); },200);
 </script>
 </body>
 </html>
