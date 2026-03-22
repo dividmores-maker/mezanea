@@ -194,6 +194,74 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; backgroun
   .welcome-box { padding:30px 20px; }
   .header-inner { gap:6px; }
 }
+
+/* ══ MABANI EMBEDDED STYLES ══ */
+.mb-wrap { font-family:'Segoe UI',Tahoma,sans-serif; }
+.mb-inner-tabs { display:flex; gap:2px; flex-wrap:wrap; margin-bottom:20px; background:#0a1520; border-radius:10px; padding:6px; }
+.mb-itab { padding:7px 16px; border:none; background:transparent; color:#8b949e; font-family:inherit; font-size:13px; cursor:pointer; border-radius:7px; transition:all .2s; white-space:nowrap; }
+.mb-itab:hover { background:#21262d; color:#e6edf3; }
+.mb-itab.active { background:linear-gradient(135deg,#c9920a,#8b6914); color:#fff; font-weight:700; }
+.mb-itab.sum-tab.active { background:linear-gradient(135deg,#2b1d00,#8b6914); color:#d29922; }
+.mb-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:20px; }
+.mb-stat { background:linear-gradient(135deg,#162535,#0f1e2e); border:1px solid #1e3a55; border-radius:12px; padding:16px; position:relative; overflow:hidden; }
+.mb-stat::before { content:''; position:absolute; top:0; right:0; width:4px; height:100%; }
+.mb-stat.inc::before { background:#3fb950; }
+.mb-stat.exp::before { background:#f85149; }
+.mb-stat.net::before { background:#58a6ff; }
+.mb-stat.bal::before { background:#d29922; }
+.mb-stat .lbl { font-size:12px; color:#8ab; margin-bottom:6px; }
+.mb-stat .ico { font-size:20px; margin-bottom:6px; }
+.mb-stat .val { font-size:20px; font-weight:900; }
+.mb-stat.inc .val { color:#3fb950; }
+.mb-stat.exp .val { color:#f85149; }
+.mb-stat.net .val { color:#58a6ff; }
+.mb-stat.bal .val { color:#d29922; }
+.mb-ob { background:linear-gradient(135deg,#162535,#0f1e2e); border:1px solid #1e3a55; border-radius:10px; padding:12px 16px; margin-bottom:14px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.mb-ob label { color:#8ab; font-size:13px; white-space:nowrap; }
+.mb-ob input { background:#0a1420; border:1px solid #3a5a8c; border-radius:6px; color:#d29922; font-size:14px; font-weight:700; padding:7px 12px; width:150px; text-align:left; direction:ltr; outline:none; }
+.mb-ob input:focus { border-color:#d29922; }
+.mb-forms { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+.mb-form { border-radius:10px; padding:16px; }
+.mb-form.inc { background:#0d2b1b; border:1px solid #1a4d2a; }
+.mb-form.exp { background:#2b0d0d; border:1px solid #5a1d1d; }
+.mb-form h3 { font-size:14px; margin-bottom:14px; font-weight:700; display:flex; align-items:center; gap:8px; }
+.mb-form.inc h3 { color:#3fb950; }
+.mb-form.exp h3 { color:#f85149; }
+.mb-fg label { display:block; font-size:12px; color:#8ab; margin-bottom:4px; }
+.mb-fg input { width:100%; background:#0f1e30; border:1px solid #2a4a6c; border-radius:6px; color:#e8d5b7; font-family:inherit; font-size:13px; padding:8px 10px; outline:none; box-sizing:border-box; }
+.mb-fg input:focus { border-color:#3a6a9c; }
+.mb-fg input[type=number] { direction:ltr; text-align:right; }
+.mb-form.inc .mb-fg input:focus { border-color:#3fb950; }
+.mb-form.exp .mb-fg input:focus { border-color:#f85149; }
+.mb-fgrid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; align-items:end; }
+.mb-btn-add { width:100%; padding:9px; border:none; border-radius:6px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:all .2s; margin-top:4px; }
+.mb-btn-add.inc { background:linear-gradient(135deg,#0d4a1f,#1a7a35); color:#3fb950; border:1px solid #3fb950; }
+.mb-btn-add.inc:hover { background:linear-gradient(135deg,#1a7a35,#2da44e); transform:translateY(-1px); }
+.mb-btn-add.exp { background:linear-gradient(135deg,#4a0d0d,#7a1a1a); color:#f85149; border:1px solid #f85149; }
+.mb-btn-add.exp:hover { background:linear-gradient(135deg,#7a1a1a,#a33030); transform:translateY(-1px); }
+.mb-btn-clear { padding:7px 16px; border-radius:7px; border:1px solid rgba(248,81,73,0.5); background:rgba(248,81,73,0.1); color:#f85149; font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; transition:all .2s; }
+.mb-btn-clear:hover { background:rgba(248,81,73,0.2); }
+.mb-tbl-wrap { background:linear-gradient(135deg,#162535,#0f1e2e); border:1px solid #1e3a55; border-radius:10px; overflow:hidden; margin-bottom:16px; }
+.mb-tbl { width:100%; border-collapse:collapse; font-size:13px; }
+.mb-tbl thead tr { background:#0a1520; border-bottom:2px solid #2a4a6c; }
+.mb-tbl thead th { padding:10px 12px; text-align:right; color:#8ab; font-weight:700; font-size:12px; white-space:nowrap; }
+.mb-tbl tbody tr { border-bottom:1px solid #1a3050; transition:background .15s; }
+.mb-tbl tbody tr:hover { background:rgba(255,255,255,0.03); }
+.mb-tbl tbody tr:last-child { border-bottom:none; }
+.mb-tbl tbody td { padding:9px 12px; vertical-align:middle; }
+.mb-tbl .n { font-weight:700; text-align:left; direction:ltr; white-space:nowrap; }
+.mb-tbl .c-in { color:#3fb950; } .mb-tbl .c-out { color:#f85149; } .mb-tbl .c-bal { color:#58a6ff; }
+.mb-tbl .c-date { color:#8ab; font-size:12px; }
+.mb-tbl .c-note { color:#567; font-size:12px; font-style:italic; }
+.mb-tbl .empty td { text-align:center; padding:36px; color:#567; }
+.mb-sum-tbl tfoot tr { background:#2b1d00; border-top:2px solid #d29922; }
+.mb-sum-tbl tfoot td { color:#d29922; font-weight:700; }
+.mb-sum-tbl tbody tr.has-data { background:rgba(31,111,235,.04); }
+.mb-mlink { color:#58a6ff; cursor:pointer; font-weight:700; }
+.mb-mlink:hover { color:#f0883e; text-decoration:underline; }
+.mb-btn-del { background:#2b0d0d; color:#f85149; border:1px solid #5a1d1d; padding:4px 9px; font-size:12px; border-radius:5px; cursor:pointer; font-family:inherit; }
+.mb-btn-del:hover { background:#3d0e0e; }
+@media(max-width:700px){ .mb-forms { grid-template-columns:1fr; } .mb-fgrid { grid-template-columns:1fr 1fr; } }
 </style>
 </head>
 <body>
@@ -312,6 +380,7 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; backgroun
   <div class="tabs-inner">
     <button class="tab-btn active allow-viewer" onclick="showTab('parishes',this)">الشعب</button>
     <button class="tab-btn allow-viewer" onclick="showTab('budget',this)">الميزانية الشهرية</button>
+    <button class="tab-btn allow-viewer" onclick="showTab('mabani',this)" id="mabani-tab-btn" style="">🏗️ المباني</button>
     <button class="tab-btn allow-viewer" onclick="showTab('annual',this)">ملخص سنوي</button>
   </div>
 </div>
@@ -481,9 +550,124 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; backgroun
     </div>
     <table class="annual-table" id="annual-table"></table>
     <div style="text-align:center;color:#567;font-size:13px;margin-top:12px">اضغط على أي شهر للانتقال إلى تفاصيله</div>
+
+    <!-- CHART -->
+    <div style="background:linear-gradient(135deg,#162535,#0f1e2e);border:1px solid #1e3a55;border-radius:14px;padding:20px 24px;margin-top:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <h3 style="color:#f5d78e;font-size:16px">📊 الرسم البياني السنوي</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="allow-viewer" onclick="setChartType('bar')" id="chart-bar-btn"
+            style="padding:5px 14px;border-radius:6px;border:1px solid #c9920a;background:rgba(201,146,10,0.2);color:#f5d78e;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">
+            ▮▮ أعمدة
+          </button>
+          <button class="allow-viewer" onclick="setChartType('line')" id="chart-line-btn"
+            style="padding:5px 14px;border-radius:6px;border:1px solid #3a6a9c;background:transparent;color:#7bc;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">
+            ∿ خطي
+          </button>
+        </div>
+      </div>
+      <div style="position:relative;height:300px">
+        <canvas id="annual-chart"></canvas>
+      </div>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:14px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:3px;background:#6dcc88;display:inline-block"></span><span style="color:#8ab;font-size:13px">الإيرادات</span></div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:3px;background:#e07090;display:inline-block"></span><span style="color:#8ab;font-size:13px">المصروفات</span></div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border-radius:3px;background:#f5d78e;display:inline-block"></span><span style="color:#8ab;font-size:13px">الرصيد</span></div>
+      </div>
+    </div>
+
+    <!-- COMBINED SUMMARY: الميزانية + المباني -->
+    <div style="margin-top:28px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <span style="font-size:22px">🔗</span>
+        <h3 style="color:#f5d78e;font-size:17px">الملخص المالي الإجمالي — الميزانية + المباني</h3>
+      </div>
+
+      <!-- Cards: الميزانية -->
+      <div style="background:linear-gradient(135deg,#162535,#0f1e2e);border:1px solid #2a5a8c;border-radius:14px;padding:18px 22px;margin-bottom:14px">
+        <div style="color:#f5d78e;font-weight:700;font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+          <span>📊</span> ملخص الميزانية السنوية
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px" id="combined-budget-cards">
+          <div style="background:rgba(40,180,80,0.08);border:1px solid rgba(40,180,80,0.25);border-radius:10px;padding:14px;text-align:center">
+            <div style="color:#8ab;font-size:12px;margin-bottom:6px">💰 إجمالي الإيرادات</div>
+            <div style="color:#6dcc88;font-size:20px;font-weight:900" id="cb-inc">0 جنيه</div>
+          </div>
+          <div style="background:rgba(200,50,80,0.08);border:1px solid rgba(200,50,80,0.25);border-radius:10px;padding:14px;text-align:center">
+            <div style="color:#8ab;font-size:12px;margin-bottom:6px">📊 إجمالي المصروفات</div>
+            <div style="color:#e07090;font-size:20px;font-weight:900" id="cb-exp">0 جنيه</div>
+          </div>
+          <div style="background:rgba(201,146,10,0.08);border:1px solid rgba(201,146,10,0.25);border-radius:10px;padding:14px;text-align:center">
+            <div style="color:#8ab;font-size:12px;margin-bottom:6px">🏦 صافي الميزانية</div>
+            <div style="font-size:20px;font-weight:900" id="cb-net">0 جنيه</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards: المباني -->
+      <div style="background:linear-gradient(135deg,#1a1a2e,#0f0f1e);border:1px solid #3a3a6a;border-radius:14px;padding:18px 22px;margin-bottom:14px">
+        <div style="color:#f0883e;font-weight:700;font-size:15px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+          <span>🏗️</span> ملخص المباني السنوي
+          <span id="mabani-sync-note" style="font-size:11px;color:#567;font-weight:400;margin-right:auto">جاري التحميل...</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+          <div style="background:rgba(240,136,62,0.08);border:1px solid rgba(240,136,62,0.25);border-radius:10px;padding:14px;text-align:center">
+            <div style="color:#8ab;font-size:12px;margin-bottom:6px">⬆️ إجمالي الوارد</div>
+            <div style="color:#3fb950;font-size:20px;font-weight:900" id="mb-inc">— جنيه</div>
+          </div>
+          <div style="background:rgba(248,81,73,0.08);border:1px solid rgba(248,81,73,0.25);border-radius:10px;padding:14px;text-align:center">
+            <div style="color:#8ab;font-size:12px;margin-bottom:6px">⬇️ إجمالي الصادر</div>
+            <div style="color:#f85149;font-size:20px;font-weight:900" id="mb-exp">— جنيه</div>
+          </div>
+          <div style="background:rgba(88,166,255,0.08);border:1px solid rgba(88,166,255,0.25);border-radius:10px;padding:14px;text-align:center">
+            <div style="color:#8ab;font-size:12px;margin-bottom:6px">💰 صافي المباني</div>
+            <div style="font-size:20px;font-weight:900" id="mb-net">— جنيه</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grand Total -->
+      <div id="grand-total-box" style="background:linear-gradient(135deg,#1a3a20,#0f2215);border:2px solid #2a6a3a;border-radius:14px;padding:20px 26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+        <div>
+          <div style="color:#8ab;font-size:13px;margin-bottom:4px">🏆 إجمالي ما تم صرفه في السنة كلها</div>
+          <div style="color:#6ab;font-size:12px">(ميزانية الكنيسة + مباني)</div>
+        </div>
+        <div style="text-align:center">
+          <div style="color:#8ab;font-size:12px;margin-bottom:4px">المصروفات الكلية</div>
+          <div style="font-size:28px;font-weight:900;color:#e07090" id="grand-exp">— جنيه</div>
+        </div>
+        <div style="text-align:center">
+          <div style="color:#8ab;font-size:12px;margin-bottom:4px">الإيرادات الكلية</div>
+          <div style="font-size:28px;font-weight:900;color:#6dcc88" id="grand-inc">— جنيه</div>
+        </div>
+        <div style="text-align:center">
+          <div style="color:#8ab;font-size:12px;margin-bottom:4px">الصافي الكلي</div>
+          <div style="font-size:32px;font-weight:900" id="grand-net">— جنيه</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MABANI TAB -->
+  <div id="tab-mabani" class="tab-panel">
+    <div class="mb-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <h3 style="color:#f0883e;font-size:18px;font-weight:900">🏗️ متابعة المباني</h3>
+        <div id="mb-sync-bar" style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;background:rgba(200,150,0,0.15);color:#f5d78e;border:1px solid rgba(200,150,0,0.4)">
+          <div id="mb-sync-dot" style="width:8px;height:8px;border-radius:50%;background:#f5d78e"></div>
+          <span id="mb-sync-text">أوفلاين</span>
+        </div>
+      </div>
+      <div class="mb-inner-tabs" id="mb-tabs"></div>
+      <div id="mb-app"></div>
+    </div>
   </div>
 
 </div><!-- end content -->
+
+
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
 <!-- Firebase SDK -->
 <script type="module">
@@ -575,6 +759,61 @@ function setSyncStatus(status) {
 // Signal that Firebase is ready
 window._firebaseReady = true;
 document.dispatchEvent(new Event('firebase-ready'));
+
+// ── Mabani listener for combined summary + embedded tab ───────────────────
+const MABANI_REF = doc(db, 'church', 'mabani');
+
+window._mbFireSave = async function(data){
+  try{
+    mbSetSyncStatus('syncing');
+    await setDoc(MABANI_REF,{payload:JSON.stringify(data),updatedAt:Date.now()});
+    mbSetSyncStatus('online');
+  }catch(e){ mbSetSyncStatus('offline'); }
+};
+
+function mbSetSyncStatus(s){
+  const dot=document.getElementById('mb-sync-dot');
+  const txt=document.getElementById('mb-sync-text');
+  const bar=document.getElementById('mb-sync-bar');
+  if(!dot) return;
+  if(s==='online'){
+    bar.style.background='rgba(40,180,80,0.15)';bar.style.color='#6dcc88';bar.style.border='1px solid rgba(40,180,80,0.4)';
+    dot.style.background='#6dcc88';dot.style.boxShadow='0 0 6px #6dcc88';txt.textContent='☁️ متزامن';
+  } else if(s==='syncing'){
+    bar.style.background='rgba(80,120,255,0.15)';bar.style.color='#aac4ff';bar.style.border='1px solid rgba(80,120,255,0.4)';
+    dot.style.background='#aac4ff';dot.style.boxShadow='none';txt.textContent='🔄 جاري المزامنة';
+  } else {
+    bar.style.background='rgba(200,150,0,0.15)';bar.style.color='#f5d78e';bar.style.border='1px solid rgba(200,150,0,0.4)';
+    dot.style.background='#f5d78e';dot.style.boxShadow='none';txt.textContent='📴 أوفلاين';
+  }
+}
+
+onSnapshot(MABANI_REF, {includeMetadataChanges:true}, (snap)=>{
+  const fromCache = snap.metadata.fromCache;
+  mbSetSyncStatus(fromCache?'offline':'online');
+  if(snap.exists()){
+    try{
+      const remote = JSON.parse(snap.data().payload||'{}');
+      if(remote && Object.keys(remote).length>0){
+        // Update MB_DB
+        if(typeof MB_DB !== 'undefined') window.MB_DB = remote;
+        try{localStorage.setItem('mabani_data',JSON.stringify(remote));}catch(e){}
+        // Re-render if tab is visible
+        const mbTab=document.getElementById('tab-mabani');
+        if(mbTab && mbTab.classList.contains('active')){
+          window.mbRenderTabs && window.mbRenderTabs();
+          window.mbRenderApp && window.mbRenderApp();
+        }
+        // Update combined summary if annual tab visible
+        if(window.updateMabaniCards && window._mabaniPendingBudget){
+          const {budInc,budExp,budNet}=window._mabaniPendingBudget;
+          window.updateMabaniCards(remote,budInc,budExp,budNet);
+        }
+      }
+    }catch(e){}
+  }
+},()=>mbSetSyncStatus('offline'));
+
 </script>
 
 <script>
@@ -1372,6 +1611,122 @@ function renderAnnual(){
       <td style="color:#e07090">${tExp.toLocaleString()}</td>
       <td style="color:${finalBal>=0?'#6dcc88':'#e07090'}">${finalBal.toLocaleString()}</td>
     </tr></tbody>`;
+
+  // Render chart after table
+  setTimeout(renderChart, 50);
+  // Render combined summary
+  setTimeout(renderCombinedSummary, 100);
+}
+
+
+/* ══════════════════════════════════════════════════════
+   CHART
+══════════════════════════════════════════════════════ */
+let annualChart = null;
+let chartType   = 'bar';
+
+function setChartType(type) {
+  chartType = type;
+  document.getElementById('chart-bar-btn').style.background  = type==='bar'  ? 'rgba(201,146,10,0.2)' : 'transparent';
+  document.getElementById('chart-bar-btn').style.borderColor = type==='bar'  ? '#c9920a' : '#3a6a9c';
+  document.getElementById('chart-bar-btn').style.color       = type==='bar'  ? '#f5d78e' : '#7bc';
+  document.getElementById('chart-line-btn').style.background = type==='line' ? 'rgba(100,160,255,0.15)' : 'transparent';
+  document.getElementById('chart-line-btn').style.borderColor= type==='line' ? '#7bc' : '#3a6a9c';
+  document.getElementById('chart-line-btn').style.color      = type==='line' ? '#7bc' : '#7bc';
+  renderChart();
+}
+
+function renderChart() {
+  const canvas = document.getElementById('annual-chart');
+  if (!canvas || !window.Chart) return;
+
+  const labels = MONTHS.map(m => m.substring(0,3));
+  const incData = MONTHS.map(m => totalIncome(m));
+  const expData = MONTHS.map(m => totalExp(m));
+  const balData = MONTHS.map(m => getEnd(m));
+
+  // Destroy previous chart
+  if (annualChart) { annualChart.destroy(); annualChart = null; }
+
+  const ctx = canvas.getContext('2d');
+  annualChart = new Chart(ctx, {
+    type: chartType,
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'الإيرادات',
+          data: incData,
+          backgroundColor: chartType==='bar' ? 'rgba(109,204,136,0.7)' : 'rgba(109,204,136,0.1)',
+          borderColor: '#6dcc88',
+          borderWidth: 2,
+          borderRadius: chartType==='bar' ? 6 : 0,
+          tension: 0.4,
+          fill: chartType==='line',
+          pointBackgroundColor: '#6dcc88',
+          pointRadius: 4,
+        },
+        {
+          label: 'المصروفات',
+          data: expData,
+          backgroundColor: chartType==='bar' ? 'rgba(224,112,144,0.7)' : 'rgba(224,112,144,0.1)',
+          borderColor: '#e07090',
+          borderWidth: 2,
+          borderRadius: chartType==='bar' ? 6 : 0,
+          tension: 0.4,
+          fill: chartType==='line',
+          pointBackgroundColor: '#e07090',
+          pointRadius: 4,
+        },
+        {
+          label: 'الرصيد',
+          data: balData,
+          backgroundColor: chartType==='bar' ? 'rgba(245,215,142,0.7)' : 'rgba(245,215,142,0.1)',
+          borderColor: '#f5d78e',
+          borderWidth: 2,
+          borderRadius: chartType==='bar' ? 6 : 0,
+          tension: 0.4,
+          fill: false,
+          pointBackgroundColor: '#f5d78e',
+          pointRadius: 4,
+          borderDash: chartType==='line' ? [5,3] : [],
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0f1e30',
+          borderColor: '#2a4a6c',
+          borderWidth: 1,
+          titleColor: '#f5d78e',
+          bodyColor: '#c8d8f0',
+          padding: 12,
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${ctx.raw.toLocaleString()} جنيه`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#8ab', font: { family: 'Segoe UI', size: 12 } },
+          grid:  { color: 'rgba(255,255,255,0.05)' }
+        },
+        y: {
+          ticks: {
+            color: '#8ab',
+            font: { family: 'Segoe UI', size: 11 },
+            callback: v => v.toLocaleString()
+          },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        }
+      }
+    }
+  });
 }
 
 function jumpMonth(m){ // allow-viewer
@@ -1382,6 +1737,92 @@ function jumpMonth(m){ // allow-viewer
   document.querySelectorAll('.tab-btn')[1].classList.add('active');
   renderBudget();
 }
+
+// ══════════════════════════════════════════════════════
+// OPEN MABANI WINDOW
+// ══════════════════════════════════════════════════════
+let mabaniWin = null;
+function openMabani(){
+  const role = currentUser ? currentUser.role : 'viewer';
+  const url = 'mabani.html?role=' + role;
+  if (mabaniWin && !mabaniWin.closed) {
+    mabaniWin.focus();
+  } else {
+    mabaniWin = window.open(url, 'mabani', 'width=1200,height=800,resizable=yes,scrollbars=yes');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// COMBINED SUMMARY (budget + mabani from Firebase)
+// ══════════════════════════════════════════════════════
+function fmt2(n){ return Number(n||0).toLocaleString('ar-EG'); }
+
+function renderCombinedSummary(){
+  // ── Budget totals ──
+  let budInc=0, budExp=0;
+  const MONTHS_LIST=["يناير","فبراير","مارس","إبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+  MONTHS_LIST.forEach(m=>{
+    if(!budget[m]) return;
+    const inc = Object.values(budget[m].income||{}).reduce((a,b)=>a+(+b||0),0);
+    let exp = 0;
+    Object.values(budget[m].expenses||{}).forEach(cat=>{ exp += Object.values(cat).reduce((a,b)=>a+(+b||0),0); });
+    budInc += inc; budExp += exp;
+  });
+  const budNet = budInc - budExp;
+
+  const cbInc = document.getElementById('cb-inc');
+  const cbExp = document.getElementById('cb-exp');
+  const cbNet = document.getElementById('cb-net');
+  if(cbInc) cbInc.textContent = fmt2(budInc) + ' جنيه';
+  if(cbExp) cbExp.textContent = fmt2(budExp) + ' جنيه';
+  if(cbNet){ cbNet.textContent = fmt2(budNet) + ' جنيه'; cbNet.style.color = budNet>=0?'#6dcc88':'#e07090'; }
+
+  // ── Mabani totals — load from Firebase ──
+  if(window._mabaniListenOnce) return; // already subscribed
+  window._mabaniListenOnce = true;
+
+  // Try to get from localStorage cache first
+  try{
+    const cached = localStorage.getItem('mabani_data');
+    if(cached) updateMabaniCards(JSON.parse(cached), budInc, budExp, budNet);
+  }catch(e){}
+
+  // Listen for live Firebase data — store budget for when snapshot arrives
+  window._mabaniPendingBudget = {budInc, budExp, budNet};
+}
+
+window.updateMabaniCards = function(DB, budInc, budExp, budNet){
+  if(!DB) return;
+  const MMONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  let mbInc=0, mbExp=0;
+  MMONTHS.forEach(m=>{
+    if(!DB[m]) return;
+    DB[m].transactions.forEach(t=>{ mbInc+=(+t.income||0); mbExp+=(+t.expense||0); });
+  });
+  const mbNet = mbInc - mbExp;
+
+  const mbIncEl = document.getElementById('mb-inc');
+  const mbExpEl = document.getElementById('mb-exp');
+  const mbNetEl = document.getElementById('mb-net');
+  const noteEl  = document.getElementById('mabani-sync-note');
+  if(mbIncEl) mbIncEl.textContent = fmt2(mbInc) + ' جنيه';
+  if(mbExpEl) mbExpEl.textContent = fmt2(mbExp) + ' جنيه';
+  if(mbNetEl){ mbNetEl.textContent = fmt2(mbNet) + ' جنيه'; mbNetEl.style.color = mbNet>=0?'#58a6ff':'#f85149'; }
+  if(noteEl)  noteEl.textContent = '☁️ محدّث';
+
+  // Grand total
+  const gInc = budInc + mbInc;
+  const gExp = budExp + mbExp;
+  const gNet = gInc - gExp;
+  const gIncEl = document.getElementById('grand-inc');
+  const gExpEl = document.getElementById('grand-exp');
+  const gNetEl = document.getElementById('grand-net');
+  const gBox   = document.getElementById('grand-total-box');
+  if(gIncEl) gIncEl.textContent = fmt2(gInc) + ' جنيه';
+  if(gExpEl) gExpEl.textContent = fmt2(gExp) + ' جنيه';
+  if(gNetEl){ gNetEl.textContent = fmt2(gNet) + ' جنيه'; gNetEl.style.color = gNet>=0?'#6dcc88':'#e07090'; }
+  if(gBox)   gBox.style.borderColor = gNet>=0?'#2a6a3a':'#6a2030';
+};
 
 // ══════════════════════════════════════════════════════
 // BACKUP & RESTORE
@@ -1634,7 +2075,7 @@ function printParishesReport() {
     <div class="sum-item"><div class="sum-num">${allM}</div><div class="sum-lbl">فرد</div></div>
   </div>
   ${parishRows || '<p style="text-align:center;color:#999">لا يوجد بيانات</p>'}
-  <div class="footer">نظام إدارة الكنيسة · ${curYear}</div>
+  <div class="footer">نظام إدارة الكنيسة · ${curYear}  by divid mores</div>
   <br>
   <div style="text-align:center"><button onclick="window.print()" style="padding:10px 30px;background:#1a3a5c;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">🖨️ طباعة</button></div>
 </body>
@@ -1760,7 +2201,7 @@ function printBudgetReport() {
     <tbody>${notesRows}</tbody>
   </table>` : ''}
 
-  <div class="footer">نظام إدارة الكنيسة · ${curYear}</div>
+  <div class="footer">نظام إدارة الكنيسة · ${curYear} by divid mores</div>
   <br>
   <div style="text-align:center"><button onclick="window.print()" style="padding:10px 30px;background:#1a3a5c;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">🖨️ طباعة</button></div>
 </body>
@@ -1802,6 +2243,365 @@ function showToast(msg,isError=false){
 document.getElementById('welcome-screen').style.display = 'none';
 // focus username on load
 setTimeout(()=>{ const u=document.getElementById('login-username'); if(u)u.focus(); },200);
+
+// ══════════════════════════════════════════════════════
+// MABANI — EMBEDDED MODULE
+// ══════════════════════════════════════════════════════
+const MB_MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+const MB_SEED = {
+  'يناير':{openingBalance:0,transactions:[
+    {id:101,date:'',descIn:'مرحل من سنه 2024',descOut:'مصروفات',income:1035,expense:5350,notes:''},
+    {id:102,date:'',descIn:'ابونا',descOut:'مصروفات',income:4000,expense:27500,notes:''},
+    {id:103,date:'',descIn:'ابونا',descOut:'مصروفات',income:315,expense:1000,notes:''},
+    {id:104,date:'',descIn:'ابونا',descOut:'مصروفات',income:29200,expense:25475,notes:''},
+    {id:105,date:'',descIn:'ابونا',descOut:'مصروفات',income:26000,expense:1000,notes:''},
+    {id:106,date:'ختي 1-30',descIn:'',descOut:'مصروفات',income:0,expense:225,notes:''},
+  ]},
+  'فبراير':{openingBalance:0,transactions:[
+    {id:201,date:'',descIn:'مرحل',descOut:'مصروفات',income:225,expense:17350,notes:''},
+    {id:202,date:'',descIn:'ابونا',descOut:'مصروفات',income:16000,expense:10725,notes:''},
+    {id:203,date:'',descIn:'ابونا',descOut:'مصروفات',income:1125,expense:13320,notes:''},
+    {id:204,date:'',descIn:'ابونا',descOut:'',income:9750,expense:0,notes:''},
+    {id:205,date:'',descIn:'ابونا',descOut:'',income:975,expense:0,notes:''},
+    {id:206,date:'',descIn:'ابونا',descOut:'',income:9025,expense:0,notes:''},
+    {id:207,date:'حتي 2-28',descIn:'ابونا',descOut:'',income:4295,expense:0,notes:''},
+  ]},
+  'مارس':{openingBalance:0,transactions:[
+    {id:301,date:'',descIn:'ابونا',descOut:'مصروفات',income:25500,expense:26280,notes:''},
+    {id:302,date:'',descIn:'ابونا',descOut:'مصروفات',income:780,expense:13900,notes:''},
+    {id:303,date:'',descIn:'ابونا',descOut:'مصروفات',income:13000,expense:7585,notes:''},
+    {id:304,date:'',descIn:'ابونا',descOut:'',income:900,expense:0,notes:''},
+    {id:305,date:'',descIn:'ابونا',descOut:'',income:7000,expense:0,notes:''},
+    {id:306,date:'حتي 30-3',descIn:'ابونا',descOut:'',income:585,expense:0,notes:''},
+  ]},
+  'أبريل':{openingBalance:0,transactions:[
+    {id:401,date:'',descIn:'ابونا',descOut:'مصروفات',income:3500,expense:4550,notes:''},
+    {id:402,date:'',descIn:'ابونا',descOut:'مصروفات',income:1050,expense:13900,notes:''},
+    {id:403,date:'',descIn:'ابونا',descOut:'مصروفات',income:12950,expense:4050,notes:''},
+    {id:404,date:'',descIn:'ابونا',descOut:'مصروفات',income:950,expense:4400,notes:''},
+    {id:405,date:'',descIn:'ابونا',descOut:'',income:4000,expense:0,notes:''},
+    {id:406,date:'',descIn:'ابونا',descOut:'',income:50,expense:0,notes:''},
+    {id:407,date:'',descIn:'ابونا',descOut:'',income:4000,expense:0,notes:''},
+    {id:408,date:'حتي 4-30',descIn:'ابونا',descOut:'',income:400,expense:0,notes:''},
+  ]},
+  'مايو':{openingBalance:0,transactions:[
+    {id:501,date:'',descIn:'ابونا',descOut:'مصروفات',income:9815,expense:9915,notes:''},
+    {id:502,date:'',descIn:'ابونا',descOut:'مصروفات',income:100,expense:9130,notes:''},
+    {id:503,date:'',descIn:'ابونا',descOut:'مصروفات',income:9230,expense:8130,notes:''},
+    {id:504,date:'',descIn:'ابونا',descOut:'',income:7300,expense:0,notes:''},
+    {id:505,date:'حتي 5-30',descIn:'ابونا',descOut:'',income:730,expense:0,notes:''},
+  ]},
+  'يونيو':{openingBalance:0,transactions:[
+    {id:601,date:'',descIn:'ابونا',descOut:'مصروفات',income:5900,expense:7350,notes:''},
+    {id:602,date:'',descIn:'ابونا',descOut:'مصروفات',income:1450,expense:5000,notes:''},
+    {id:603,date:'',descIn:'ابونا',descOut:'مصروفات',income:5000,expense:8030,notes:''},
+    {id:604,date:'',descIn:'ابونا',descOut:'',income:8000,expense:0,notes:''},
+    {id:605,date:'حتي 6-30',descIn:'ابونا',descOut:'',income:30,expense:0,notes:''},
+  ]},
+  'يوليو':{openingBalance:0,transactions:[
+    {id:701,date:'',descIn:'ابونا',descOut:'مصروفات',income:4000,expense:4750,notes:''},
+    {id:702,date:'',descIn:'ابونا',descOut:'مصروفات',income:750,expense:12720,notes:''},
+    {id:703,date:'',descIn:'ابونا',descOut:'مصروفات',income:10600,expense:7035,notes:''},
+    {id:704,date:'',descIn:'ابونا',descOut:'',income:2120,expense:0,notes:''},
+    {id:705,date:'',descIn:'ابونا',descOut:'',income:4000,expense:0,notes:''},
+    {id:706,date:'2025-07-30',descIn:'ابونا',descOut:'',income:3035,expense:0,notes:''},
+  ]},
+  'أغسطس':{openingBalance:0,transactions:[
+    {id:801,date:'',descIn:'ابونا',descOut:'مصروفات',income:13940,expense:13275,notes:''},
+    {id:802,date:'',descIn:'ابونا',descOut:'مصروفات',income:10000,expense:11335,notes:''},
+    {id:803,date:'',descIn:'ابونا',descOut:'مصروفات',income:670,expense:13950,notes:''},
+    {id:804,date:'',descIn:'ابونا',descOut:'مصروفات',income:13000,expense:26250,notes:''},
+    {id:805,date:'',descIn:'ابونا',descOut:'مصروفات',income:950,expense:2050,notes:''},
+    {id:806,date:'حتي 8-30',descIn:'ابونا',descOut:'',income:28300,expense:0,notes:''},
+  ]},
+  'سبتمبر':{openingBalance:0,transactions:[
+    {id:901,date:'',descIn:'ابونا',descOut:'مصروفات',income:2050,expense:7100,notes:''},
+    {id:902,date:'',descIn:'ابونا',descOut:'مصروفات',income:900,expense:19535,notes:''},
+    {id:903,date:'',descIn:'ابونا',descOut:'مصروفات',income:5050,expense:800,notes:''},
+    {id:904,date:'',descIn:'ابونا',descOut:'',income:14550,expense:0,notes:''},
+    {id:905,date:'',descIn:'ابونا',descOut:'',income:5785,expense:0,notes:''},
+  ]},
+  'أكتوبر':{openingBalance:0,transactions:[
+    {id:1001,date:'',descIn:'ابونا',descOut:'مصروفات',income:7500,expense:11850,notes:''},
+    {id:1002,date:'',descIn:'ابونا',descOut:'مصروفات',income:4350,expense:4790,notes:''},
+    {id:1003,date:'',descIn:'ابونا',descOut:'مصروفات',income:2650,expense:490,notes:''},
+    {id:1004,date:'حتي 10-30',descIn:'ابونا',descOut:'مصروفات',income:3000,expense:370,notes:''},
+  ]},
+  'نوفمبر':{openingBalance:0,transactions:[
+    {id:1101,date:'',descIn:'ابونا',descOut:'مصروفات',income:370,expense:6500,notes:''},
+    {id:1102,date:'',descIn:'ابونا',descOut:'مصروفات',income:2000,expense:10080,notes:''},
+    {id:1103,date:'',descIn:'ابونا',descOut:'مصروفات',income:2500,expense:4680,notes:''},
+    {id:1104,date:'',descIn:'ابونا',descOut:'مصروفات',income:860,expense:320,notes:''},
+    {id:1105,date:'',descIn:'ابونا',descOut:'',income:770,expense:0,notes:''},
+    {id:1106,date:'',descIn:'ابونا',descOut:'',income:10000,expense:0,notes:''},
+    {id:1107,date:'',descIn:'ابونا',descOut:'',income:80,expense:0,notes:''},
+    {id:1108,date:'حتي 11-30',descIn:'ابونا',descOut:'',income:5000,expense:0,notes:''},
+  ]},
+  'ديسمبر':{openingBalance:0,transactions:[
+    {id:1201,date:'',descIn:'ابونا',descOut:'مصروفات',income:320,expense:5630,notes:''},
+    {id:1202,date:'',descIn:'ابونا',descOut:'',income:5000,expense:0,notes:''},
+    {id:1203,date:'حتي 12-30',descIn:'ابونا',descOut:'',income:310,expense:0,notes:''},
+  ]},
+};
+
+// ── MB STATE ─────────────────────────────────────────────────────────────────
+let MB_DB = null;
+let mb_activeTab = 'summary';
+let mb_nextId = 9000;
+
+function mbLoadData(){
+  try{ const d=localStorage.getItem('mabani_data'); if(d) return JSON.parse(d); }catch(e){}
+  return JSON.parse(JSON.stringify(MB_SEED));
+}
+function mbSaveLocal(){ try{localStorage.setItem('mabani_data',JSON.stringify(MB_DB));}catch(e){} }
+function mbSave(){
+  mbSaveLocal();
+  clearTimeout(window._mbSaveTimer);
+  window._mbSaveTimer = setTimeout(()=>{
+    if(window._mbFireSave) window._mbFireSave(MB_DB);
+  },1500);
+}
+
+function mbFmt(n){ if(n===null||n===undefined||isNaN(n))return'—'; return Math.abs(n).toLocaleString('ar-EG'); }
+
+function mbCalcMonth(m){
+  const d=MB_DB[m];
+  const totalIn=d.transactions.reduce((s,t)=>s+(t.income||0),0);
+  const totalOut=d.transactions.reduce((s,t)=>s+(t.expense||0),0);
+  return{totalIn,totalOut,net:totalIn-totalOut};
+}
+function mbRunningBals(m){
+  const d=MB_DB[m]; let b=d.openingBalance||0;
+  return d.transactions.map(t=>{b+=(t.income||0)-(t.expense||0);return b;});
+}
+
+function mbSetSyncStatus(s){
+  const dot=document.getElementById('mb-sync-dot');
+  const txt=document.getElementById('mb-sync-text');
+  const bar=document.getElementById('mb-sync-bar');
+  if(!dot) return;
+  if(s==='online'){
+    bar.style.background='rgba(40,180,80,0.15)';bar.style.color='#6dcc88';bar.style.border='1px solid rgba(40,180,80,0.4)';
+    dot.style.background='#6dcc88';dot.style.boxShadow='0 0 6px #6dcc88';txt.textContent='☁️ متزامن';
+  } else if(s==='syncing'){
+    bar.style.background='rgba(80,120,255,0.15)';bar.style.color='#aac4ff';bar.style.border='1px solid rgba(80,120,255,0.4)';
+    dot.style.background='#aac4ff';dot.style.boxShadow='none';txt.textContent='🔄 جاري المزامنة';
+  } else {
+    bar.style.background='rgba(200,150,0,0.15)';bar.style.color='#f5d78e';bar.style.border='1px solid rgba(200,150,0,0.4)';
+    dot.style.background='#f5d78e';dot.style.boxShadow='none';txt.textContent='📴 أوفلاين';
+  }
+}
+
+// ── MB RENDER TABS ────────────────────────────────────────────────────────────
+function mbRenderTabs(){
+  const c=document.getElementById('mb-tabs'); if(!c) return;
+  c.innerHTML='';
+  // Summary button
+  const sb=document.createElement('button');
+  sb.className='mb-itab sum-tab'+(mb_activeTab==='summary'?' active':'');
+  sb.textContent='📊 ملخص السنة';
+  sb.onclick=()=>{mb_activeTab='summary';mbRenderTabs();mbRenderApp();};
+  c.appendChild(sb);
+  // Month buttons
+  MB_MONTHS.forEach(m=>{
+    const {totalIn}=mbCalcMonth(m);
+    const btn=document.createElement('button');
+    btn.className='mb-itab'+(mb_activeTab===m?' active':'');
+    btn.textContent=m+(totalIn>0?' ●':'');
+    btn.onclick=()=>{mb_activeTab=m;mbRenderTabs();mbRenderApp();};
+    c.appendChild(btn);
+  });
+}
+
+function mbRenderApp(){
+  const el=document.getElementById('mb-app'); if(!el) return;
+  el.innerHTML = mb_activeTab==='summary' ? mbRenderSummary() : mbRenderMonth(mb_activeTab);
+}
+
+// ── MB SUMMARY ────────────────────────────────────────────────────────────────
+function mbRenderSummary(){
+  let tIn=0,tOut=0;
+  MB_MONTHS.forEach(m=>{const c=mbCalcMonth(m);tIn+=c.totalIn;tOut+=c.totalOut;});
+  const tNet=tIn-tOut;
+  let runBal=0, rows='';
+  MB_MONTHS.forEach(m=>{
+    const c=mbCalcMonth(m); runBal+=c.net;
+    const has=c.totalIn>0||c.totalOut>0;
+    rows+=`<tr class="${has?'has-data':''}">
+      <td><span class="mb-mlink" onclick="mb_activeTab='${m}';mbRenderTabs();mbRenderApp()">${m}</span></td>
+      <td class="n c-in">${c.totalIn?mbFmt(c.totalIn)+' ج':'—'}</td>
+      <td class="n c-out">${c.totalOut?mbFmt(c.totalOut)+' ج':'—'}</td>
+      <td class="n ${c.net>=0?'c-in':'c-out'}">${c.net?(c.net<0?'−':'')+mbFmt(c.net)+' ج':'—'}</td>
+      <td class="n ${runBal>=0?'c-bal':'c-out'}">${has?mbFmt(runBal)+' ج':'—'}</td>
+    </tr>`;
+  });
+  return `
+  <div class="mb-stats">
+    <div class="mb-stat inc"><div class="ico">✅</div><div class="lbl">إجمالي الوارد السنوي</div><div class="val">${mbFmt(tIn)} ج</div></div>
+    <div class="mb-stat exp"><div class="ico">❌</div><div class="lbl">إجمالي الصادر السنوي</div><div class="val">${mbFmt(tOut)} ج</div></div>
+    <div class="mb-stat net"><div class="ico">💰</div><div class="lbl">صافي السنة</div><div class="val">${mbFmt(tNet)} ج</div></div>
+    <div class="mb-stat bal"><div class="ico">🏆</div><div class="lbl">الرصيد الختامي</div><div class="val">${mbFmt(tNet)} ج</div></div>
+  </div>
+  <div class="mb-tbl-wrap">
+    <table class="mb-tbl mb-sum-tbl">
+      <thead><tr><th>الشهر</th><th>إجمالي الوارد</th><th>إجمالي الصادر</th><th>صافي الشهر</th><th>الرصيد الختامي</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr>
+        <td>🏆 إجمالي السنة</td>
+        <td class="n">${mbFmt(tIn)} ج</td>
+        <td class="n">${mbFmt(tOut)} ج</td>
+        <td class="n">${mbFmt(tNet)} ج</td>
+        <td class="n">${mbFmt(tNet)} ج</td>
+      </tr></tfoot>
+    </table>
+  </div>
+  <div style="background:#162535;border:1px solid #1e3a55;border-right:3px solid #f0883e;border-radius:10px;padding:10px 14px;font-size:12px;color:#8ab">
+    📌 اضغط على اسم الشهر عشان تروح لتفاصيله
+  </div>`;
+}
+
+// ── MB MONTH ──────────────────────────────────────────────────────────────────
+function mbRenderMonth(month){
+  const d=MB_DB[month];
+  const c=mbCalcMonth(month);
+  const bals=mbRunningBals(month);
+  const lastBal=bals.length>0?bals[bals.length-1]:d.openingBalance||0;
+  const isViewer = currentUser && currentUser.role === 'viewer';
+
+  let rows='';
+  if(d.transactions.length===0){
+    rows=`<tr class="empty"><td colspan="8" style="text-align:center;padding:36px;color:#567">لا توجد معاملات بعد ⬆️</td></tr>`;
+  } else {
+    d.transactions.forEach((t,i)=>{
+      const b=bals[i];
+      rows+=`<tr>
+        <td class="c-date">${t.date||'—'}</td>
+        <td>${t.descIn||'—'}</td>
+        <td>${t.descOut||'—'}</td>
+        <td class="n c-in">${t.income?mbFmt(t.income)+' ج':'—'}</td>
+        <td class="n c-out">${t.expense?mbFmt(t.expense)+' ج':'—'}</td>
+        <td class="n ${b>=0?'c-bal':'c-out'}">${mbFmt(b)} ج</td>
+        <td class="c-note">${t.notes||''}</td>
+        <td>${isViewer?'':'<button class="mb-btn-del" onclick="mbDelRow(\''+month+'\','+t.id+')">🗑️</button>'}</td>
+      </tr>`;
+    });
+  }
+
+  const clearBtn = isViewer ? '' :
+    `<button class="mb-btn-clear" onclick="mbClearMonth('${month}')">🗑️ مسح جميع معاملات الشهر</button>`;
+
+  return `
+  <div class="mb-stats">
+    <div class="mb-stat inc"><div class="ico">✅</div><div class="lbl">إجمالي الوارد</div><div class="val">${mbFmt(c.totalIn)} ج</div></div>
+    <div class="mb-stat exp"><div class="ico">❌</div><div class="lbl">إجمالي الصادر</div><div class="val">${mbFmt(c.totalOut)} ج</div></div>
+    <div class="mb-stat net"><div class="ico">💰</div><div class="lbl">صافي الشهر</div><div class="val">${mbFmt(c.net)} ج</div></div>
+    <div class="mb-stat bal"><div class="ico">🏦</div><div class="lbl">الرصيد الختامي</div><div class="val">${mbFmt(lastBal)} ج</div></div>
+  </div>
+
+  <div class="mb-ob">
+    <span>💰</span>
+    <label>الرصيد الافتتاحي للشهر:</label>
+    <input type="number" value="${d.openingBalance||0}" ${isViewer?'disabled':''} onchange="mbUpdateOB('${month}',this.value)" />
+    <span style="font-size:12px;color:#567">يترحل تلقائياً</span>
+  </div>
+
+  ${isViewer ? '' : `
+  <div class="mb-forms">
+    <div class="mb-form inc">
+      <h3>⬆️ إضافة وارد</h3>
+      <div class="mb-fgrid">
+        <div class="mb-fg"><label>📅 التاريخ</label><input type="date" id="mb-fi-date"/></div>
+        <div class="mb-fg"><label>📋 البيان</label><input type="text" id="mb-fi-desc" placeholder="مصدر الوارد..."/></div>
+        <div class="mb-fg"><label>💵 المبلغ</label><input type="number" id="mb-fi-amt" placeholder="0" min="0"/></div>
+        <div class="mb-fg" style="grid-column:1/-1"><label>📝 ملاحظات</label><input type="text" id="mb-fi-notes" placeholder="اختياري..."/></div>
+        <div class="mb-fg" style="grid-column:1/-1"><button class="mb-btn-add inc" onclick="mbAddIncome('${month}')">✅ إضافة وارد</button></div>
+      </div>
+    </div>
+    <div class="mb-form exp">
+      <h3>⬇️ إضافة صادر</h3>
+      <div class="mb-fgrid">
+        <div class="mb-fg"><label>📅 التاريخ</label><input type="date" id="mb-fe-date"/></div>
+        <div class="mb-fg"><label>📋 البيان</label><input type="text" id="mb-fe-desc" placeholder="جهة الصرف..."/></div>
+        <div class="mb-fg"><label>💵 المبلغ</label><input type="number" id="mb-fe-amt" placeholder="0" min="0"/></div>
+        <div class="mb-fg" style="grid-column:1/-1"><label>📝 ملاحظات</label><input type="text" id="mb-fe-notes" placeholder="اختياري..."/></div>
+        <div class="mb-fg" style="grid-column:1/-1"><button class="mb-btn-add exp" onclick="mbAddExpense('${month}')">❌ إضافة صادر</button></div>
+      </div>
+    </div>
+  </div>`}
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+    <div style="color:#f5d78e;font-weight:700;font-size:15px">🏢 سجل معاملات — ${month} <span style="color:#567;font-size:12px;font-weight:400">(${d.transactions.length} معاملة)</span></div>
+    ${clearBtn}
+  </div>
+
+  <div class="mb-tbl-wrap">
+    <table class="mb-tbl">
+      <thead><tr>
+        <th>📅 التاريخ</th><th>بيانات الوارد</th><th>بيانات الصرف</th>
+        <th>⬆️ وارد</th><th>⬇️ صادر</th><th>💹 الرصيد التراكمي</th>
+        <th>📝 ملاحظات</th><th></th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+// ── MB ACTIONS ────────────────────────────────────────────────────────────────
+function mbUpdateOB(m,v){
+  if(currentUser&&currentUser.role==='viewer') return;
+  MB_DB[m].openingBalance=parseFloat(v)||0; mbSave(); mbRenderApp();
+}
+function mbAddIncome(m){
+  if(currentUser&&currentUser.role==='viewer') return;
+  const date=document.getElementById('mb-fi-date').value;
+  const desc=(document.getElementById('mb-fi-desc').value||'').trim();
+  const amt=parseFloat(document.getElementById('mb-fi-amt').value)||0;
+  const notes=(document.getElementById('mb-fi-notes').value||'').trim();
+  if(!desc&&amt===0){showToast('❌ أدخل البيان والمبلغ!',true);return;}
+  MB_DB[m].transactions.push({id:mb_nextId++,date,descIn:desc,descOut:'',income:amt,expense:0,notes});
+  mbSave(); mbRenderTabs(); mbRenderApp();
+  showToast('✅ تم إضافة الوارد');
+}
+function mbAddExpense(m){
+  if(currentUser&&currentUser.role==='viewer') return;
+  const date=document.getElementById('mb-fe-date').value;
+  const desc=(document.getElementById('mb-fe-desc').value||'').trim();
+  const amt=parseFloat(document.getElementById('mb-fe-amt').value)||0;
+  const notes=(document.getElementById('mb-fe-notes').value||'').trim();
+  if(!desc&&amt===0){showToast('❌ أدخل البيان والمبلغ!',true);return;}
+  MB_DB[m].transactions.push({id:mb_nextId++,date,descIn:'',descOut:desc,income:0,expense:amt,notes});
+  mbSave(); mbRenderTabs(); mbRenderApp();
+  showToast('✅ تم إضافة الصادر');
+}
+function mbDelRow(m,id){
+  if(currentUser&&currentUser.role==='viewer') return;
+  if(!confirm('هتحذف المعاملة دي؟')) return;
+  MB_DB[m].transactions=MB_DB[m].transactions.filter(t=>t.id!==id);
+  mbSave(); mbRenderTabs(); mbRenderApp();
+  showToast('🗑️ تم الحذف');
+}
+function mbClearMonth(m){
+  if(currentUser&&currentUser.role==='viewer') return;
+  if(!confirm(`هتمسح كل معاملات شهر "${m}". متأكد؟`)) return;
+  MB_DB[m].transactions=[];
+  mbSave(); mbRenderTabs(); mbRenderApp();
+  showToast(`🗑️ تم مسح كل معاملات ${m}`);
+}
+
+// ── MB INIT (called when tab opens or Firebase loads) ─────────────────────────
+function mbInit(){
+  if(!MB_DB) MB_DB = mbLoadData();
+  mbRenderTabs();
+  mbRenderApp();
+}
+
+// Hook into showTab to init mabani when tab selected
+const _origShowTab = window.showTab;
+window.showTab = function(name, btn){
+  _origShowTab(name, btn);
+  if(name==='mabani') mbInit();
+};
 </script>
 </body>
 </html>
